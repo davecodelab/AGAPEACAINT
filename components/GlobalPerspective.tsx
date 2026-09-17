@@ -2,6 +2,7 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import SectionHeading from "./SectionHeading";
+import Image from "next/image";
 
 const HIGHLIGHTS = [
   "International curriculum",

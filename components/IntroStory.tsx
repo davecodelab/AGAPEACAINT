@@ -4,6 +4,7 @@ import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import SectionHeading from "./SectionHeading";
+import Image from "next/image";
 
 const PILLARS = [
   { title: "Academic Excellence", body: "A rigorous, well-rounded curriculum that stretches every learner." },
@@ -27,9 +28,13 @@ export default function IntroStory() {
           className="aspect-[4/5] w-full overflow-hidden rounded-sm bg-gradient-to-br from-[#6C0798]/15 to-[#19151C]/10 lg:order-2"
         >
           {/* Editorial photograph placeholder — a teacher and students in conversation */}
-          <img
+    <Image
     src="/cover.jpg"
     alt="Teacher speaking with Agape Academy students"
+    width={800}
+    height={1000}
+    priority
+    quality={90} 
     className="h-full w-full object-cover"
   />
         </motion.div>

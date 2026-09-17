@@ -3,6 +3,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import {
   ArrowDown,
   ArrowRight,
@@ -117,9 +118,13 @@ export default function AboutPage() {
     ease: [0.22, 1, 0.36, 1],
   }}
 >
-  <img
+  <Image
     src="/banner.jpg"
-    alt=""
+    alt="COver pic of students"
+    fill
+    priority
+    quality={90}
+
     className="h-full w-full object-cover"
   />
 </motion.div>

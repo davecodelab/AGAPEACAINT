@@ -1,11 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import {
   ArrowDown,
   ArrowRight,
   BadgeCheck,
-  BookOpen,
   CalendarDays,
   Check,
   ChevronDown,
@@ -179,9 +179,12 @@ export default function AdmissionsPage() {
     }}
     className="absolute inset-[-6%]"
   >
-    <img
+    <Image
       src="https://images.unsplash.com/photo-1529390079861-591de354faf5?auto=format&fit=crop&w=2400&q=90"
       alt="Students learning and connecting together"
+      fill
+      priority
+      quality={90}
       className="h-full w-full object-cover object-[58%_center] sm:object-center"
     />
   </motion.div>
