@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { Search, Menu, X, ChevronDown } from "lucide-react";
+import Image from "next/image";
 
 type MenuItem = {
   label: string;
@@ -51,7 +52,6 @@ const NAV_ITEMS: MenuGroup[] = [
   {
     label: "Admissions",
     items: [
-      { label: "Why Agape", href: "/admissions#why-agape" },
       { label: "How to Apply", href: "/admissions#how-to-apply" },
       { label: "Requirements", href: "/admissions#requirements" },
       { label: "Fees", href: "/admissions#fees" },
@@ -100,11 +100,13 @@ export default function Navbar() {
             solid ? "text-[#6C0798]" : "text-white"
           }`}
         >
-          Agape Academy
-
-          <span className="block font-sans text-[10px] font-medium uppercase tracking-[0.18em] opacity-70">
-            International
-          </span>
+          <Image
+            src="/school_logo.png"
+            alt="Agape Academy International logo"
+            width={32}
+            height={32}
+            className="inline-block h-8 w-8 rounded-lg object-contain"
+          />
         </Link>
 
         {/* Desktop Navigation */}
@@ -197,13 +199,6 @@ export default function Navbar() {
 
         {/* Right Actions */}
         <div className="hidden items-center gap-4 lg:flex">
-          <button
-            aria-label="Search"
-            className={solid ? "text-[#19151C]" : "text-white"}
-          >
-            <Search size={18} />
-          </button>
-
           <Link
             href="/admissions#book-a-visit"
             className={`font-sans text-sm font-medium ${

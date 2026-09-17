@@ -463,14 +463,13 @@ export default function AcademicsPage() {
       <Reveal direction="left">
         <div className="relative min-h-[280px] overflow-hidden sm:min-h-[420px] lg:min-h-[560px]">
 
-          <ParallaxImage
-            src="https://agapeacademyinternational.edu.gh/wp-content/uploads/2024/09/abeka.jpg"
+          <img
+            src="/abek.jpg"
             alt="Abeka curriculum at Agape Academy International"
             className="absolute inset-0 h-full w-full"
-            intensity={7}
           />
 
-          <div className="absolute inset-0 bg-gradient-to-t from-[#19151C]/70 via-transparent to-transparent" />
+         
 
           <div className="absolute bottom-5 left-5 sm:bottom-7 sm:left-7">
             <span className="rounded-full border border-white/20 bg-black/20 px-3 py-1.5 font-sans text-[9px] font-semibold uppercase tracking-[0.18em] text-white/80 backdrop-blur-md sm:text-[10px]">

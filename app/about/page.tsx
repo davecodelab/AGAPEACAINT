@@ -108,10 +108,43 @@ export default function AboutPage() {
     <main className="overflow-hidden bg-[#FAF8F9] text-[#19151C]">
       {/* HERO */}
       <section className="relative flex min-h-[90vh] items-end overflow-hidden bg-[#6C0798] px-6 pb-20 pt-40 text-white lg:px-10 lg:pb-28">
-        <div className="absolute inset-0">
-          <div className="absolute -right-32 -top-32 h-[500px] w-[500px] rounded-full bg-white/10 blur-3xl" />
-          <div className="absolute -bottom-40 left-1/4 h-[500px] w-[500px] rounded-full bg-[#E12F41]/30 blur-3xl" />
-        </div>
+        <motion.div
+  className="absolute inset-0 overflow-hidden"
+  initial={{ scale: 1.08 }}
+  animate={{ scale: 1 }}
+  transition={{
+    duration: 1.6,
+    ease: [0.22, 1, 0.36, 1],
+  }}
+>
+  <img
+    src="/banner.jpg"
+    alt=""
+    className="h-full w-full object-cover"
+  />
+</motion.div>
+
+{/* Cinematic overlays */}
+<div className="absolute inset-0 bg-[#19151C]/55" />
+
+<div className="absolute inset-0 bg-gradient-to-r from-[#19151C]/85 via-[#19151C]/40 to-transparent" />
+
+<div className="absolute inset-0 bg-gradient-to-t from-[#19151C] via-[#19151C]/20 to-transparent" />
+
+{/* Brand glow */}
+<motion.div
+  animate={{
+    x: [0, 60, 0],
+    y: [0, -30, 0],
+    opacity: [0.08, 0.16, 0.08],
+  }}
+  transition={{
+    duration: 12,
+    repeat: Infinity,
+    ease: "easeInOut",
+  }}
+  className="absolute -right-32 -top-32 h-[500px] w-[500px] rounded-full bg-[#6C0798] blur-[100px]"
+/>
 
         <div className="relative mx-auto w-full max-w-7xl">
           <motion.div

@@ -1,7 +1,8 @@
 {
+  "/_not-found/page": "app/_not-found/page.js",
   "/about/page": "app/about/page.js",
-  "/student-life/page": "app/student-life/page.js",
-  "/admissions/page": "app/admissions/page.js",
   "/gallery/page": "app/gallery/page.js",
-  "/accessibility/page": "app/accessibility/page.js"
+  "/contact/page": "app/contact/page.js",
+  "/admissions/page": "app/admissions/page.js",
+  "/academics/page": "app/academics/page.js"
 }

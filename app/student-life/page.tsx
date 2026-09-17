@@ -56,7 +56,7 @@ const activities = [
     text: "Sport develops discipline, resilience, teamwork and the confidence to perform under pressure.",
     icon: Trophy,
     image:
-      "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=1400&q=90",
+      "/games_3.jpg",
   },
   {
     number: "03",
@@ -200,9 +200,7 @@ export default function StudentLifePage() {
         {/* Heading */}
         <FadeUp>
           <h1 className="max-w-[21rem] font-serif text-[3.4rem] leading-[0.86] tracking-[-0.05em] sm:max-w-3xl sm:text-7xl sm:leading-[0.88] md:text-8xl lg:max-w-5xl lg:text-[8rem]">
-
             Where students
-
             <span className="mt-2 block text-white/40 sm:mt-0">
               become more.
             </span>
@@ -600,7 +598,7 @@ export default function StudentLifePage() {
                 className="relative overflow-hidden rounded-[1.5rem] sm:rounded-[2rem]"
               >
                 <img
-                  src="https://agapeacademyinternational.edu.gh/wp-content/uploads/2024/09/abeka.jpg"
+                  src="/abek.jpg"
                   alt="Abeka curriculum"
                   className="aspect-[4/3] h-full w-full object-cover"
                 />

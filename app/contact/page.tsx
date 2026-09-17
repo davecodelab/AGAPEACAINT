@@ -64,11 +64,10 @@ export default function ContactPage() {
 
       <section className="relative min-h-[72svh] overflow-hidden bg-[#19151C] text-white sm:min-h-[76vh]">
 
-        <ParallaxImage
-          src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=2200&q=90"
+        <img
+          src="/changed.png"
           alt="Agape Academy students"
-          className="absolute inset-0 h-full w-full"
-          intensity={8}
+          className="absolute inset-0 h-full w-full object-cover object-center"
         />
 
         <div className="absolute inset-0 bg-[#19151C]/55" />
