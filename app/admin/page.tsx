@@ -10,10 +10,12 @@ import {
   Plus,
   Trash2,
   Camera,
+  Video,
 } from "lucide-react";
 import ImageUploadModal from "@/components/admin/ImageUploadModal";
 import { MediaSlot, GalleryPhoto, DEFAULT_SLOTS } from "@/lib/media-slots";
 import { invalidateSlotsCache } from "@/lib/use-media-slots";
+import { isCloudinaryVideoUrl } from "@/lib/cloudinary";
 
 export default function AdminDashboardPage() {
   const [activeTab, setActiveTab] = useState<"slots" | "gallery">("slots");
@@ -308,78 +310,102 @@ export default function AdminDashboardPage() {
 
           {/* Cards Grid */}
           <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {filteredSlots.map((slot) => (
-              <div
-                key={slot.id}
-                className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-[#19151C]/10 bg-white shadow-sm transition-all duration-200 hover:border-[#6C0798]/30 hover:shadow-md"
-              >
-                {/* Photo Presentation */}
+            {filteredSlots.map((slot) => {
+              const isVideo = isCloudinaryVideoUrl(slot.currentUrl);
+              const isHero = slot.id === "home_hero";
+
+              return (
                 <div
-                  onClick={() => {
-                    setTargetSlot(slot);
-                    setIsGalleryUpload(false);
-                    setUploadModalOpen(true);
-                  }}
-                  className="relative aspect-[16/10] w-full cursor-pointer overflow-hidden bg-[#FAF8F9]"
+                  key={slot.id}
+                  className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-[#19151C]/10 bg-white shadow-sm transition-all duration-200 hover:border-[#6C0798]/30 hover:shadow-md"
                 >
-                  <img
-                    src={slot.currentUrl}
-                    alt={slot.altText || slot.label}
-                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-                  />
-
-                  {/* Gentle hover prompt */}
-                  <div className="absolute inset-0 flex items-center justify-center bg-[#19151C]/30 opacity-0 backdrop-blur-[1px] transition-opacity duration-200 group-hover:opacity-100">
-                    <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-3.5 py-1.5 font-sans text-xs font-semibold text-[#19151C] shadow-md">
-                      <Camera size={13} />
-                      <span>Change photo</span>
-                    </span>
-                  </div>
-
-                  {/* Status chip if updated */}
-                  {slot.currentUrl.includes("cloudinary") && (
-                    <span className="absolute right-3 top-3 rounded-full bg-white/95 px-2.5 py-0.5 font-sans text-[10px] font-medium text-[#6C0798] shadow-sm backdrop-blur-sm">
-                      Updated photo
-                    </span>
-                  )}
-                </div>
-
-                {/* Card Information */}
-                <div className="flex flex-1 flex-col justify-between p-5">
-                  <div>
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="rounded-full bg-[#6C0798]/10 px-2.5 py-0.5 font-sans text-[11px] font-semibold text-[#6C0798] capitalize">
-                        {slot.section.replace("_", " ")}
-                      </span>
-                      <span className="font-sans text-xs text-[#19151C]/45">
-                        {slot.recommendedDimensions}
-                      </span>
-                    </div>
-
-                    <h2 className="mt-2.5 font-serif text-lg text-[#19151C]">
-                      {slot.label}
-                    </h2>
-
-                    <p className="mt-1 font-sans text-xs leading-relaxed text-[#19151C]/60">
-                      {slot.description}
-                    </p>
-                  </div>
-
-                  {/* Action Button */}
-                  <button
+                  {/* Media Presentation */}
+                  <div
                     onClick={() => {
                       setTargetSlot(slot);
                       setIsGalleryUpload(false);
                       setUploadModalOpen(true);
                     }}
-                    className="mt-4 inline-flex w-full items-center justify-center gap-1.5 rounded-full border border-[#19151C]/15 bg-white py-2 font-sans text-xs font-medium text-[#19151C] transition-all hover:border-[#6C0798] hover:bg-[#6C0798] hover:text-white"
+                    className="relative aspect-[16/10] w-full cursor-pointer overflow-hidden bg-[#FAF8F9]"
                   >
-                    <UploadCloud size={14} />
-                    <span>Change photo</span>
-                  </button>
+                    {isVideo ? (
+                      <video
+                        src={slot.currentUrl}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      <img
+                        src={slot.currentUrl}
+                        alt={slot.altText || slot.label}
+                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                      />
+                    )}
+
+                    {/* Gentle hover prompt */}
+                    <div className="absolute inset-0 flex items-center justify-center bg-[#19151C]/30 opacity-0 backdrop-blur-[1px] transition-opacity duration-200 group-hover:opacity-100">
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-3.5 py-1.5 font-sans text-xs font-semibold text-[#19151C] shadow-md">
+                        {isHero ? <Video size={13} /> : <Camera size={13} />}
+                        <span>{isHero ? "Change photo or video" : "Change photo"}</span>
+                      </span>
+                    </div>
+
+                    {/* Video badge */}
+                    {isVideo && (
+                      <span className="absolute left-3 top-3 flex items-center gap-1 rounded-full bg-white/95 px-2.5 py-0.5 font-sans text-[10px] font-semibold text-[#6C0798] shadow-sm backdrop-blur-sm">
+                        <Video size={11} />
+                        <span>Video</span>
+                      </span>
+                    )}
+
+                    {/* Status chip if updated */}
+                    {slot.currentUrl.includes("cloudinary") && !isVideo && (
+                      <span className="absolute right-3 top-3 rounded-full bg-white/95 px-2.5 py-0.5 font-sans text-[10px] font-medium text-[#6C0798] shadow-sm backdrop-blur-sm">
+                        Updated photo
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Card Information */}
+                  <div className="flex flex-1 flex-col justify-between p-5">
+                    <div>
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="rounded-full bg-[#6C0798]/10 px-2.5 py-0.5 font-sans text-[11px] font-semibold text-[#6C0798] capitalize">
+                          {slot.section.replace("_", " ")}
+                        </span>
+                        <span className="font-sans text-xs text-[#19151C]/45">
+                          {slot.recommendedDimensions}
+                        </span>
+                      </div>
+
+                      <h2 className="mt-2.5 font-serif text-lg text-[#19151C]">
+                        {slot.label}
+                      </h2>
+
+                      <p className="mt-1 font-sans text-xs leading-relaxed text-[#19151C]/60">
+                        {slot.description}
+                      </p>
+                    </div>
+
+                    {/* Action Button */}
+                    <button
+                      onClick={() => {
+                        setTargetSlot(slot);
+                        setIsGalleryUpload(false);
+                        setUploadModalOpen(true);
+                      }}
+                      className="mt-4 inline-flex w-full items-center justify-center gap-1.5 rounded-full border border-[#19151C]/15 bg-white py-2 font-sans text-xs font-medium text-[#19151C] transition-all hover:border-[#6C0798] hover:bg-[#6C0798] hover:text-white"
+                    >
+                      {isHero ? <Video size={14} /> : <UploadCloud size={14} />}
+                      <span>{isHero ? "Change photo or video" : "Change photo"}</span>
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}
@@ -527,6 +553,7 @@ export default function AdminDashboardPage() {
           targetAspectRatio={targetSlot.aspectRatio}
           recommendedDimensions={targetSlot.recommendedDimensions}
           initialAltText={targetSlot.altText}
+          allowVideo={targetSlot.id === "home_hero"}
         />
       )}
     </div>
