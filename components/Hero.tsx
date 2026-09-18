@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Play } from "lucide-react";
 import { useMediaSlot } from "@/lib/use-media-slots";
 import { isCloudinaryUrl, isCloudinaryVideoUrl } from "@/lib/cloudinary";
 

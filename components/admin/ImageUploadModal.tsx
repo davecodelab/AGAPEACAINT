@@ -251,24 +251,24 @@ export default function ImageUploadModal({
   const hasMediaSelected = Boolean(optResult || videoData);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#19151C]/60 p-4 backdrop-blur-sm sm:p-6">
-      <div className="relative w-full max-w-xl overflow-hidden rounded-2xl border border-[#19151C]/10 bg-white shadow-2xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#19151C]/60 p-3 sm:p-6 backdrop-blur-sm">
+      <div className="relative flex max-h-[92vh] w-full max-w-xl flex-col overflow-hidden rounded-2xl border border-[#19151C]/10 bg-white shadow-2xl">
         {/* Modal Header */}
-        <div className="flex items-start justify-between border-b border-[#19151C]/10 bg-[#FAF8F9] px-6 py-5 sm:px-8">
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="rounded-full bg-[#6C0798]/10 px-2.5 py-0.5 font-sans text-xs font-semibold text-[#6C0798]">
+        <div className="flex shrink-0 items-start justify-between border-b border-[#19151C]/10 bg-[#FAF8F9] px-4 py-4 sm:px-8 sm:py-5">
+          <div className="pr-2">
+            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+              <span className="rounded-full bg-[#6C0798]/10 px-2 py-0.5 font-sans text-[11px] sm:text-xs font-semibold text-[#6C0798]">
                 {section}
               </span>
-              <span className="font-sans text-xs text-[#19151C]/50">
+              <span className="font-sans text-[11px] sm:text-xs text-[#19151C]/50">
                 {supportsVideo ? "Photo or Video (16:9)" : `Recommended: ${recommendedDimensions}`}
               </span>
             </div>
-            <h2 className="mt-2 font-serif text-xl text-[#19151C] sm:text-2xl">
+            <h2 className="mt-1.5 sm:mt-2 font-serif text-lg sm:text-2xl text-[#19151C]">
               {title}
             </h2>
             {description && (
-              <p className="mt-1 font-sans text-xs text-[#19151C]/60">
+              <p className="mt-0.5 sm:mt-1 font-sans text-xs text-[#19151C]/60 line-clamp-2">
                 {description}
               </p>
             )}
@@ -277,16 +277,16 @@ export default function ImageUploadModal({
           <button
             onClick={onClose}
             aria-label="Close"
-            className="flex h-8 w-8 items-center justify-center rounded-full text-[#19151C]/40 transition-colors hover:bg-[#19151C]/5 hover:text-[#19151C]"
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[#19151C]/40 transition-colors hover:bg-[#19151C]/5 hover:text-[#19151C]"
           >
             <X size={18} />
           </button>
         </div>
 
         {/* Content Body */}
-        <div className="max-h-[70vh] overflow-y-auto p-6 sm:p-8">
+        <div className="flex-1 overflow-y-auto p-4 sm:p-8">
           {error && (
-            <div className="mb-5 rounded-xl border border-red-200 bg-red-50 p-3.5 font-sans text-xs text-red-800">
+            <div className="mb-4 rounded-xl border border-red-200 bg-red-50 p-3 font-sans text-xs text-red-800">
               {error}
             </div>
           )}
@@ -299,23 +299,23 @@ export default function ImageUploadModal({
               onDragOver={onDrag}
               onDrop={onDrop}
               onClick={() => fileInputRef.current?.click()}
-              className={`group flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed p-10 text-center transition-all ${
+              className={`group flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed p-6 sm:p-10 text-center transition-all ${
                 dragActive
                   ? "border-[#6C0798] bg-[#6C0798]/5"
                   : "border-[#19151C]/15 bg-[#FAF8F9] hover:border-[#6C0798]/50 hover:bg-[#6C0798]/[0.02]"
               }`}
             >
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#6C0798]/10 text-[#6C0798] transition-transform group-hover:scale-105">
-                {supportsVideo ? <Video size={24} /> : <UploadCloud size={24} />}
+              <div className="flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-[#6C0798]/10 text-[#6C0798] transition-transform group-hover:scale-105">
+                {supportsVideo ? <Video size={22} /> : <UploadCloud size={22} />}
               </div>
 
-              <p className="mt-4 font-sans text-sm font-semibold text-[#19151C]">
+              <p className="mt-3 sm:mt-4 font-sans text-xs sm:text-sm font-semibold text-[#19151C]">
                 {supportsVideo
-                  ? "Choose a photo or video, or drag & drop here"
-                  : "Choose a photo or drag & drop here"}
+                  ? "Choose photo or video, or drag & drop"
+                  : "Choose photo or drag & drop here"}
               </p>
 
-              <p className="mt-1 font-sans text-xs text-[#19151C]/50">
+              <p className="mt-1 font-sans text-[11px] sm:text-xs text-[#19151C]/50">
                 {supportsVideo
                   ? "Photos (JPG, PNG, WebP) or Videos (MP4, WebM up to 100MB)"
                   : "Supports JPG, PNG, or WebP · Paste with Ctrl+V"}
@@ -323,7 +323,7 @@ export default function ImageUploadModal({
 
               <button
                 type="button"
-                className="mt-4 rounded-full border border-[#19151C]/15 bg-white px-4 py-1.5 font-sans text-xs font-medium text-[#19151C] transition-colors group-hover:border-[#6C0798] group-hover:text-[#6C0798]"
+                className="mt-3.5 rounded-full border border-[#19151C]/15 bg-white px-4 py-1.5 font-sans text-xs font-medium text-[#19151C] transition-colors group-hover:border-[#6C0798] group-hover:text-[#6C0798]"
               >
                 Browse files
               </button>
@@ -342,9 +342,9 @@ export default function ImageUploadModal({
 
           {/* Optimizing State */}
           {optimizing && (
-            <div className="flex flex-col items-center justify-center py-12 text-center">
-              <Loader2 size={28} className="animate-spin text-[#6C0798]" />
-              <p className="mt-4 font-serif text-lg text-[#19151C]">
+            <div className="flex flex-col items-center justify-center py-10 text-center">
+              <Loader2 size={26} className="animate-spin text-[#6C0798]" />
+              <p className="mt-3 font-serif text-base sm:text-lg text-[#19151C]">
                 Preparing photo...
               </p>
               <p className="mt-1 font-sans text-xs text-[#19151C]/50">
@@ -355,7 +355,7 @@ export default function ImageUploadModal({
 
           {/* Video Preview State */}
           {videoData && (
-            <div className="space-y-5">
+            <div className="space-y-4">
               <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-[#19151C]/10 bg-[#19151C]">
                 <video
                   src={videoData.previewUrl}
@@ -369,12 +369,12 @@ export default function ImageUploadModal({
               </div>
 
               {/* Video Info Pill */}
-              <div className="flex items-center justify-between rounded-xl bg-[#FAF8F9] px-4 py-3 text-xs">
+              <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl bg-[#FAF8F9] p-3 text-xs">
                 <div className="flex items-center gap-2 font-sans">
                   <span className="rounded-full bg-[#6C0798]/10 px-2 py-0.5 font-semibold text-[#6C0798]">
                     Video
                   </span>
-                  <span className="text-[#19151C]/60 truncate max-w-[180px]">
+                  <span className="text-[#19151C]/60 truncate max-w-[140px] sm:max-w-[180px]">
                     {videoData.name}
                   </span>
                   <span className="text-[#19151C]/40">·</span>
@@ -402,7 +402,7 @@ export default function ImageUploadModal({
                   value={altText}
                   onChange={(e) => setAltText(e.target.value)}
                   placeholder="e.g. Agape Academy students campus b-roll"
-                  className="mt-1.5 h-10 w-full rounded-xl border border-[#19151C]/15 bg-[#FAF8F9] px-3.5 font-sans text-xs text-[#19151C] outline-none transition-colors focus:border-[#6C0798] focus:bg-white focus:ring-1 focus:ring-[#6C0798]"
+                  className="mt-1.5 h-9 sm:h-10 w-full rounded-xl border border-[#19151C]/15 bg-[#FAF8F9] px-3.5 font-sans text-xs text-[#19151C] outline-none transition-colors focus:border-[#6C0798] focus:bg-white focus:ring-1 focus:ring-[#6C0798]"
                 />
               </div>
             </div>
@@ -410,7 +410,7 @@ export default function ImageUploadModal({
 
           {/* Image Preview & Info */}
           {optResult && (
-            <div className="space-y-5">
+            <div className="space-y-4">
               {/* Image Preview Container */}
               <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-[#19151C]/10 bg-[#FAF8F9]">
                 <img
@@ -421,8 +421,8 @@ export default function ImageUploadModal({
               </div>
 
               {/* Optimization summary */}
-              <div className="flex items-center justify-between rounded-xl bg-[#FAF8F9] px-4 py-3 text-xs">
-                <div className="flex items-center gap-4">
+              <div className="flex flex-wrap items-center justify-between gap-2.5 rounded-xl bg-[#FAF8F9] p-3 text-xs">
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                   <div>
                     <span className="text-[#19151C]/50">Original:</span>{" "}
                     <span className="font-semibold text-[#19151C]">
@@ -431,7 +431,7 @@ export default function ImageUploadModal({
                   </div>
                   <span className="text-[#19151C]/20">→</span>
                   <div>
-                    <span className="text-[#19151C]/50">Ready to upload:</span>{" "}
+                    <span className="text-[#19151C]/50">Ready:</span>{" "}
                     <span className="font-semibold text-[#6C0798]">
                       {formatBytes(optResult.optimizedSize)}
                     </span>
@@ -460,7 +460,7 @@ export default function ImageUploadModal({
                   value={altText}
                   onChange={(e) => setAltText(e.target.value)}
                   placeholder="e.g. Students in modern science lab"
-                  className="mt-1.5 h-10 w-full rounded-xl border border-[#19151C]/15 bg-[#FAF8F9] px-3.5 font-sans text-xs text-[#19151C] outline-none transition-colors focus:border-[#6C0798] focus:bg-white focus:ring-1 focus:ring-[#6C0798]"
+                  className="mt-1.5 h-9 sm:h-10 w-full rounded-xl border border-[#19151C]/15 bg-[#FAF8F9] px-3.5 font-sans text-xs text-[#19151C] outline-none transition-colors focus:border-[#6C0798] focus:bg-white focus:ring-1 focus:ring-[#6C0798]"
                 />
               </div>
             </div>
@@ -468,7 +468,7 @@ export default function ImageUploadModal({
         </div>
 
         {/* Modal Footer */}
-        <div className="flex items-center justify-between border-t border-[#19151C]/10 bg-[#FAF8F9] px-6 py-4 sm:px-8">
+        <div className="flex shrink-0 items-center justify-between border-t border-[#19151C]/10 bg-[#FAF8F9] px-4 py-3 sm:px-8 sm:py-4">
           <button
             type="button"
             onClick={onClose}

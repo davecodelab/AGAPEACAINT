@@ -68,6 +68,7 @@ const CATEGORY_TINT: Record<GalleryCategory, string> = {
   "Creative Spaces": "#8B176F",
   Chapel: "#4B075F",
   Outdoor: "#6C0798",
+  "Student Life": "#6C0798",
   Graduation: "#8B176F",
 };
 

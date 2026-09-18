@@ -68,52 +68,53 @@ export default function AdminLayout({
     <div className="min-h-screen bg-[#FAF8F9] text-[#19151C] antialiased">
       {/* Header */}
       <header className="sticky top-0 z-40 border-b border-[#19151C]/10 bg-white/90 backdrop-blur-md">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3.5 sm:px-10 lg:px-12">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-8 sm:py-3.5 lg:px-12">
           {/* School Brand */}
-          <Link href="/admin" className="group flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#FAF8F9] p-1.5 ring-1 ring-[#19151C]/10 transition-transform duration-200 group-hover:scale-105">
+          <Link href="/admin" className="group flex items-center gap-2.5 sm:gap-3">
+            <div className="flex h-9 w-9 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-xl bg-[#FAF8F9] p-1.5 ring-1 ring-[#19151C]/10 transition-transform duration-200 group-hover:scale-105">
               <Image
                 src="/school_logo.png"
                 alt="Agape Academy International"
-                width={30}
-                height={30}
+                width={28}
+                height={28}
                 className="object-contain"
               />
             </div>
             <div>
-              <div className="flex items-center gap-1.5">
-                <span className="font-serif text-base text-[#19151C]">
+              <div className="flex items-center gap-1">
+                <span className="font-serif text-sm sm:text-base font-medium text-[#19151C]">
                   Agape Academy
                 </span>
-                <span className="font-serif text-sm italic text-[#6C0798]">
+                <span className="hidden xs:inline font-serif text-xs sm:text-sm italic text-[#6C0798]">
                   International
                 </span>
               </div>
-              <p className="font-sans text-[11px] font-medium text-[#19151C]/50">
-                Photo Manager
+              <p className="font-sans text-[10px] sm:text-[11px] font-medium text-[#19151C]/50">
+                Media CMS
               </p>
             </div>
           </Link>
 
           {/* Actions */}
-          <div className="flex items-center gap-4 sm:gap-6">
+          <div className="flex items-center gap-3 sm:gap-5">
             <Link
               href="/"
               target="_blank"
-              className="inline-flex items-center gap-1.5 font-sans text-xs font-medium text-[#19151C]/70 transition-colors hover:text-[#6C0798]"
+              className="inline-flex items-center gap-1 font-sans text-xs font-medium text-[#19151C]/70 transition-colors hover:text-[#6C0798]"
             >
-              <span>View Website</span>
-              <ExternalLink size={13} />
+              <span className="hidden sm:inline">View Website</span>
+              <span className="sm:hidden">Website</span>
+              <ExternalLink size={12} />
             </Link>
 
-            <div className="h-4 w-px bg-[#19151C]/10" />
+            <div className="h-3.5 w-px bg-[#19151C]/10" />
 
             <button
               onClick={handleLogout}
-              className="inline-flex items-center gap-1.5 font-sans text-xs font-medium text-[#19151C]/60 transition-colors hover:text-red-600"
+              className="inline-flex items-center gap-1 font-sans text-xs font-medium text-[#19151C]/60 transition-colors hover:text-red-600"
             >
-              <LogOut size={14} />
-              <span>Sign out</span>
+              <LogOut size={13} />
+              <span className="hidden sm:inline">Sign out</span>
             </button>
           </div>
         </div>
