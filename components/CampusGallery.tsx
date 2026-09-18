@@ -19,14 +19,15 @@ type GalleryCategory =
   | "Creative Spaces"
   | "Chapel"
   | "Outdoor"
-  | "Student Life";
+  | "Student Life"
+  | "Graduation";
 
 type GalleryImage = {
   id: string;
   category: GalleryCategory;
   title: string;
   caption: string;
-  src?: string; // optional real photo path — falls back to a styled placeholder
+  src?: string;
 };
 
 const CATEGORIES: GalleryCategory[] = [
@@ -39,9 +40,12 @@ const CATEGORIES: GalleryCategory[] = [
   "Chapel",
   "Outdoor",
   "Student Life",
+  "Graduation",
 ];
 
 const IMAGES: GalleryImage[] = [
+  { id: "g_grad1", category: "Graduation", title: "Commencement Day", caption: "Senior students celebrating graduation at Agape Academy International.", src: "/grad_01.jpg" },
+  { id: "g_grad2", category: "Graduation", title: "Honouring Our Graduates", caption: "Academic achievement and character recognised on graduation day.", src: "/girl_grad.jpg" },
   { id: "g1", category: "Classrooms", title: "Middle School classroom", caption: "Students collaborating during a Grade 7 lesson." },
   { id: "g2", category: "Science", title: "Science laboratory", caption: "Hands-on experimentation in the senior science lab." },
   { id: "g3", category: "Chapel", title: "Morning chapel", caption: "The school community gathers for weekly chapel." },
@@ -56,8 +60,6 @@ const IMAGES: GalleryImage[] = [
   { id: "g12", category: "Student Life", title: "Student Union", caption: "Student Union members planning a community project." },
 ];
 
-// A muted per-category tint, kept mostly neutral so the 70/20/10 colour
-// balance holds even across a full grid of placeholders.
 const CATEGORY_TINT: Record<GalleryCategory, string> = {
   Classrooms: "#6C0798",
   Science: "#4B075F",
@@ -66,7 +68,6 @@ const CATEGORY_TINT: Record<GalleryCategory, string> = {
   "Creative Spaces": "#8B176F",
   Chapel: "#4B075F",
   Outdoor: "#6C0798",
-  "Student Life": "#E12F41",
   Graduation: "#8B176F",
 };
 
@@ -100,11 +101,30 @@ function PatternPlaceholder({ image }: { image: GalleryImage }) {
 export default function CampusGallery() {
   const [active, setActive] = useState<GalleryCategory | "All">("All");
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [galleryImages, setGalleryImages] = useState<GalleryImage[]>(IMAGES);
   const prefersReducedMotion = useReducedMotion();
 
+  useEffect(() => {
+    fetch("/api/admin/gallery")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.photos) && data.photos.length > 0) {
+          const dynamicList: GalleryImage[] = data.photos.map((p: any) => ({
+            id: p.id,
+            category: p.category as GalleryCategory,
+            title: p.title || "Campus Life",
+            caption: p.caption || "",
+            src: p.cloudinary_url,
+          }));
+          setGalleryImages([...dynamicList, ...IMAGES]);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   const filtered = useMemo(
-    () => (active === "All" ? IMAGES : IMAGES.filter((img) => img.category === active)),
-    [active]
+    () => (active === "All" ? galleryImages : galleryImages.filter((img) => img.category === active)),
+    [active, galleryImages]
   );
 
   const openImage = filtered[openIndex ?? -1] ?? null;

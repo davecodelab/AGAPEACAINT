@@ -26,6 +26,8 @@ import {
   Reveal,
 } from "@/components/Animations";
 import AgapeCTA from "@/components/AgapeCTA";
+import { useMediaSlot } from "@/lib/use-media-slots";
+import { isCloudinaryVideoUrl } from "@/lib/cloudinary";
 
 /* -------------------------------------------------------------------------- */
 /* Academic stages */
@@ -111,6 +113,24 @@ const academicStages = [
 /* -------------------------------------------------------------------------- */
 
 export default function AcademicsPage() {
+  const heroSlot = useMediaSlot("academics_hero");
+  const supportSlot = useMediaSlot("academics_learning_support");
+  const abekaSlot = useMediaSlot("academics_abeka_feature");
+
+  const earlyYearsSlot = useMediaSlot("academics_stage_early_years");
+  const primarySlot = useMediaSlot("academics_stage_primary");
+  const middleSlot = useMediaSlot("academics_stage_middle");
+  const highSchoolSlot = useMediaSlot("academics_stage_high_school");
+
+  const stageSlots: Record<string, typeof earlyYearsSlot> = {
+    "early-years": earlyYearsSlot,
+    "primary": primarySlot,
+    "middle": middleSlot,
+    "high-school": highSchoolSlot,
+  };
+
+  const isVideoHero = isCloudinaryVideoUrl(heroSlot.currentUrl);
+
   return (
     <main className="overflow-hidden bg-[#FAF8F9] text-[#19151C]">
 
@@ -120,12 +140,23 @@ export default function AcademicsPage() {
 
       <section className="relative min-h-[92vh] overflow-hidden bg-[#19151C] text-white">
 
-        <ParallaxImage
-          src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=2200&q=90"
-          alt="Students learning together"
-          className="absolute inset-0 h-full w-full opacity-45"
-          intensity={8}
-        />
+        {isVideoHero ? (
+          <video
+            src={heroSlot.currentUrl}
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-50"
+          />
+        ) : (
+          <ParallaxImage
+            src={heroSlot.currentUrl || "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=2200&q=90"}
+            alt={heroSlot.altText || "Students learning together"}
+            className="absolute inset-0 h-full w-full opacity-45"
+            intensity={8}
+          />
+        )}
 
         <div className="absolute inset-0 bg-gradient-to-b from-[#19151C]/55 via-[#19151C]/35 to-[#19151C]" />
 
@@ -326,8 +357,8 @@ export default function AcademicsPage() {
                     <div className="relative">
 
                       <ParallaxImage
-                        src={stage.image}
-                        alt={`${stage.title} students`}
+                        src={stageSlots[stage.id]?.currentUrl || stage.image}
+                        alt={stageSlots[stage.id]?.altText || `${stage.title} students`}
                         className="aspect-[4/3] rounded-[2rem] bg-[#19151C]"
                         intensity={8}
                       />
@@ -464,9 +495,9 @@ export default function AcademicsPage() {
         <div className="relative min-h-[280px] overflow-hidden sm:min-h-[420px] lg:min-h-[560px]">
 
           <img
-            src="/abek.jpg"
-            alt="Abeka curriculum at Agape Academy International"
-            className="absolute inset-0 h-full w-full"
+            src={abekaSlot.currentUrl || "/abek.jpg"}
+            alt={abekaSlot.altText || "Abeka curriculum at Agape Academy International"}
+            className="absolute inset-0 h-full w-full object-cover"
           />
 
          
@@ -771,8 +802,8 @@ export default function AcademicsPage() {
               <div className="relative">
 
                 <ParallaxImage
-                  src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1800&q=85"
-                  alt="Student receiving individual learning support"
+                  src={supportSlot.currentUrl || "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1800&q=85"}
+                  alt={supportSlot.altText || "Student receiving individual learning support"}
                   className="aspect-[4/5] rounded-[2.5rem]"
                   intensity={7}
                 />

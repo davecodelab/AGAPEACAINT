@@ -39,6 +39,8 @@ import {
   Stagger,
   StaggerItem,
 } from "@/components/Animations";
+import AgapeCTA from "@/components/AgapeCTA";
+import { useMediaSlot } from "@/lib/use-media-slots";
 
 const admissionSections = [
   {
@@ -137,6 +139,8 @@ const faqs = [
 
 export default function AdmissionsPage() {
   const { scrollYProgress } = useScroll();
+  const heroSlot = useMediaSlot("admissions_hero");
+  const movingSlot = useMediaSlot("admissions_moving_to_ghana");
 
   const progress = useSpring(scrollYProgress, {
     stiffness: 100,
@@ -180,11 +184,12 @@ export default function AdmissionsPage() {
     className="absolute inset-[-6%]"
   >
     <Image
-      src="https://images.unsplash.com/photo-1529390079861-591de354faf5?auto=format&fit=crop&w=2400&q=90"
-      alt="Students learning and connecting together"
+      src={heroSlot.currentUrl || "https://images.unsplash.com/photo-1529390079861-591de354faf5?auto=format&fit=crop&w=2400&q=90"}
+      alt={heroSlot.altText || "Students learning and connecting together"}
       fill
       priority
       quality={90}
+      unoptimized={Boolean(heroSlot.currentUrl && heroSlot.currentUrl.includes("res.cloudinary.com"))}
       className="h-full w-full object-cover object-[58%_center] sm:object-center"
     />
   </motion.div>
@@ -724,8 +729,8 @@ export default function AdmissionsPage() {
         <div className="grid lg:grid-cols-2">
           <div className="relative min-h-[480px] overflow-hidden sm:min-h-[600px] lg:min-h-[760px]">
             <ParallaxImage
-              src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1800&q=90"
-              alt="Students from different backgrounds"
+              src={movingSlot.currentUrl || "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1800&q=90"}
+              alt={movingSlot.altText || "Students from different backgrounds"}
               className="absolute inset-0 h-full w-full"
               intensity={10}
             />

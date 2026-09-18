@@ -4,16 +4,61 @@ import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import SectionHeading from "./SectionHeading";
+import { useMediaSlot } from "@/lib/use-media-slots";
 
 const SPACES = [
-  { name: "Classrooms", tint: "#6C0798" },
-  { name: "Science", tint: "#4B075F" },
-  { name: "Library", tint: "#19151C" },
-  { name: "Sport", tint: "#E12F41" },
-  { name: "Creative Spaces", tint: "#8B176F" },
-  { name: "Chapel", tint: "#4B075F" },
-  
+  {
+    name: "Classrooms",
+    slotId: "home_campus_classrooms",
+    fallbackUrl: "https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=85",
+  },
+  {
+    name: "Science",
+    slotId: "home_campus_science",
+    fallbackUrl: "https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=800&q=85",
+  },
+  {
+    name: "Library",
+    slotId: "home_campus_library",
+    fallbackUrl: "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&w=800&q=85",
+  },
+  {
+    name: "Sport",
+    slotId: "home_campus_sport",
+    fallbackUrl: "/games_1.jpg",
+  },
+  {
+    name: "Creative Spaces",
+    slotId: "home_campus_creative",
+    fallbackUrl: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=800&q=85",
+  },
+  {
+    name: "Chapel",
+    slotId: "home_campus_chapel",
+    fallbackUrl: "https://images.unsplash.com/photo-1548625361-195fe578b907?auto=format&fit=crop&w=800&q=85",
+  },
 ];
+
+function SpaceCard({ space }: { space: typeof SPACES[0] }) {
+  const slot = useMediaSlot(space.slotId);
+
+  return (
+    <Link
+      href="/gallery"
+      className="group relative flex aspect-[4/5] flex-col justify-end overflow-hidden rounded-xl bg-[#19151C]/10 p-4 shadow-sm"
+    >
+      <img
+        src={slot.currentUrl || space.fallbackUrl}
+        alt={slot.altText || `${space.name} at Agape Academy`}
+        className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#19151C]/85 via-[#19151C]/20 to-transparent" />
+      <span className="relative z-10 font-sans text-sm font-medium text-white transition-colors group-hover:text-white/90">
+        {space.name}
+      </span>
+    </Link>
+  );
+}
 
 export default function CampusPreview() {
   const prefersReducedMotion = useReducedMotion();
@@ -44,17 +89,7 @@ export default function CampusPreview() {
               viewport={{ once: true, margin: "-40px" }}
               transition={{ duration: 0.4, delay: i * 0.05 }}
             >
-              <Link
-                href="/gallery"
-                className="group flex aspect-[4/5] flex-col justify-end overflow-hidden rounded-sm p-4"
-                style={{
-                  background: `linear-gradient(160deg, ${space.tint}1F 0%, #19151C0D 100%)`,
-                }}
-              >
-                <span className="font-sans text-sm font-medium text-[#19151C]/75 transition-colors group-hover:text-[#19151C]">
-                  {space.name}
-                </span>
-              </Link>
+              <SpaceCard space={space} />
             </motion.div>
           ))}
         </div>

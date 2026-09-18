@@ -4,9 +4,11 @@ import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import SectionHeading from "./SectionHeading";
+import { useMediaSlot } from "@/lib/use-media-slots";
 
 export default function PrincipalMessage() {
   const prefersReducedMotion = useReducedMotion();
+  const slot = useMediaSlot("home_principal");
 
   return (
     <section className="bg-white px-6 py-20 sm:py-28 lg:px-10">
@@ -16,8 +18,14 @@ export default function PrincipalMessage() {
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.6 }}
-          className="aspect-[3/4] w-full max-w-sm rounded-sm bg-gradient-to-br from-[#4B075F]/15 to-[#6C0798]/10"
-        />
+          className="relative aspect-[3/4] w-full max-w-sm overflow-hidden rounded-2xl bg-[#19151C]/5 shadow-sm"
+        >
+          <img
+            src={slot.currentUrl || "/girl_grad.jpg"}
+            alt={slot.altText || "Principal, Agape Academy International"}
+            className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+          />
+        </motion.div>
         <div>
           <SectionHeading
             eyebrow="From our leadership"

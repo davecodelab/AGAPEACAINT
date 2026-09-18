@@ -22,7 +22,8 @@ export interface GalleryPhoto {
     | "Creative Spaces"
     | "Chapel"
     | "Outdoor"
-    | "Student Life";
+    | "Student Life"
+    | "Graduation";
   title: string;
   caption: string;
   cloudinaryUrl: string;
@@ -43,6 +44,7 @@ export const DEFAULT_SLOTS: Record<string, MediaSlot> = {
     currentUrl: "/school_logo.png",
     altText: "Agape Academy International Logo",
   },
+
   // Homepage
   home_hero: {
     id: "home_hero",
@@ -67,8 +69,8 @@ export const DEFAULT_SLOTS: Record<string, MediaSlot> = {
   home_wellbeing: {
     id: "home_wellbeing",
     section: "homepage",
-    label: "Wellbeing & Pastoral Care Photo",
-    description: "Featured photography in the 'Known. Supported. Encouraged.' section.",
+    label: "3. Known. Supported. Encouraged. Photo",
+    description: "Featured photography in the 'Known. Supported. Encouraged.' wellbeing section.",
     aspectRatio: "4:3",
     recommendedDimensions: "1400x1050",
     currentUrl: "/together.jpg",
@@ -77,12 +79,104 @@ export const DEFAULT_SLOTS: Record<string, MediaSlot> = {
   home_principal: {
     id: "home_principal",
     section: "homepage",
-    label: "Principal Official Portrait",
-    description: "Official portrait of school leadership accompanying the Principal's Welcome.",
+    label: "4. Education is about who we help students become",
+    description: "Official portrait of leadership in the Principal's Welcome section.",
     aspectRatio: "3:4",
     recommendedDimensions: "900x1200",
     currentUrl: "/girl_grad.jpg",
     altText: "Principal, Agape Academy International",
+  },
+  home_mosaic_sport: {
+    id: "home_mosaic_sport",
+    section: "homepage",
+    label: "2. Learning doesn't stop at the classroom: Sport Card",
+    description: "Featured visual card for Sport in 'Learning doesn't stop at the classroom'.",
+    aspectRatio: "4:3",
+    recommendedDimensions: "1400x1050",
+    currentUrl: "/games_3.jpg",
+    altText: "Students competing on sports day",
+  },
+  home_parent_story_1: {
+    id: "home_parent_story_1",
+    section: "homepage",
+    label: "5. Parent Stories — Testimonial 1 Portrait",
+    description: "Parent portrait for the first testimonial in the Parent Stories section.",
+    aspectRatio: "1:1",
+    recommendedDimensions: "400x400",
+    currentUrl: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=600&q=85",
+    altText: "Agape Academy parent",
+  },
+  home_parent_story_2: {
+    id: "home_parent_story_2",
+    section: "homepage",
+    label: "5. Parent Stories — Testimonial 2 Portrait",
+    description: "Parent portrait for the second testimonial in the Parent Stories section.",
+    aspectRatio: "1:1",
+    recommendedDimensions: "400x400",
+    currentUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=85",
+    altText: "Agape Academy parent",
+  },
+
+  // 6. A place to learn. A place to belong (Campus Spaces)
+  home_campus_classrooms: {
+    id: "home_campus_classrooms",
+    section: "homepage",
+    label: "6. A place to learn: Classrooms Space Card",
+    description: "Visual card for Classrooms in 'A place to learn. A place to belong.'",
+    aspectRatio: "3:4",
+    recommendedDimensions: "800x1000",
+    currentUrl: "https://images.unsplash.com/photo-1580582932707-520aed937b7b?auto=format&fit=crop&w=800&q=85",
+    altText: "Modern classrooms at Agape Academy",
+  },
+  home_campus_science: {
+    id: "home_campus_science",
+    section: "homepage",
+    label: "6. A place to learn: Science Labs Space Card",
+    description: "Visual card for Science in 'A place to learn. A place to belong.'",
+    aspectRatio: "3:4",
+    recommendedDimensions: "800x1000",
+    currentUrl: "https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=800&q=85",
+    altText: "Science laboratory",
+  },
+  home_campus_library: {
+    id: "home_campus_library",
+    section: "homepage",
+    label: "6. A place to learn: Library Space Card",
+    description: "Visual card for Library in 'A place to learn. A place to belong.'",
+    aspectRatio: "3:4",
+    recommendedDimensions: "800x1000",
+    currentUrl: "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&w=800&q=85",
+    altText: "School library and reading room",
+  },
+  home_campus_sport: {
+    id: "home_campus_sport",
+    section: "homepage",
+    label: "6. A place to learn: Sport Grounds Space Card",
+    description: "Visual card for Sport grounds in 'A place to learn. A place to belong.'",
+    aspectRatio: "3:4",
+    recommendedDimensions: "800x1000",
+    currentUrl: "/games_1.jpg",
+    altText: "Athletics and sports field",
+  },
+  home_campus_creative: {
+    id: "home_campus_creative",
+    section: "homepage",
+    label: "6. A place to learn: Creative Spaces Card",
+    description: "Visual card for Creative Spaces in 'A place to learn. A place to belong.'",
+    aspectRatio: "3:4",
+    recommendedDimensions: "800x1000",
+    currentUrl: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=800&q=85",
+    altText: "Art studio and creative rooms",
+  },
+  home_campus_chapel: {
+    id: "home_campus_chapel",
+    section: "homepage",
+    label: "6. A place to learn: Chapel Space Card",
+    description: "Visual card for Chapel in 'A place to learn. A place to belong.'",
+    aspectRatio: "3:4",
+    recommendedDimensions: "800x1000",
+    currentUrl: "https://images.unsplash.com/photo-1548625361-195fe578b907?auto=format&fit=crop&w=800&q=85",
+    altText: "Chapel and spiritual gathering hall",
   },
 
   // About Page
@@ -96,13 +190,23 @@ export const DEFAULT_SLOTS: Record<string, MediaSlot> = {
     currentUrl: "/banner.jpg",
     altText: "Agape Academy community banner",
   },
+  contact_hero: {
+    id: "contact_hero",
+    section: "about",
+    label: "Contact Page Hero Background",
+    description: "Atmospheric photo welcoming visitors to get in touch.",
+    aspectRatio: "16:9",
+    recommendedDimensions: "2000x1125",
+    currentUrl: "/changed.png",
+    altText: "Agape Academy International campus",
+  },
 
   // Academics Page
   academics_hero: {
     id: "academics_hero",
     section: "academics",
-    label: "Academics Hero Background",
-    description: "Hero parallax image on the academics journey overview page.",
+    label: "8. Hero of Academics Background",
+    description: "Hero parallax image introducing the academics journey page.",
     aspectRatio: "16:9",
     recommendedDimensions: "2200x1240",
     currentUrl: "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=2200&q=90",
@@ -111,8 +215,8 @@ export const DEFAULT_SLOTS: Record<string, MediaSlot> = {
   academics_stage_early_years: {
     id: "academics_stage_early_years",
     section: "academics",
-    label: "Early Years Stage (Ages 3–5)",
-    description: "Representative photography of kindergarten & nursery classroom activities.",
+    label: "1. Every Age, Every Stage: Early Years (Ages 3–5)",
+    description: "Early childhood learning and exploration stage card.",
     aspectRatio: "4:3",
     recommendedDimensions: "1400x1050",
     currentUrl: "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&w=1800&q=85",
@@ -121,8 +225,8 @@ export const DEFAULT_SLOTS: Record<string, MediaSlot> = {
   academics_stage_primary: {
     id: "academics_stage_primary",
     section: "academics",
-    label: "Primary School Stage (Ages 6–10)",
-    description: "Representative photo of foundational primary classroom learning.",
+    label: "1. Every Age, Every Stage: Primary School (Ages 6–10)",
+    description: "Foundational primary classroom learning stage card.",
     aspectRatio: "4:3",
     recommendedDimensions: "1400x1050",
     currentUrl: "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1800&q=85",
@@ -131,8 +235,8 @@ export const DEFAULT_SLOTS: Record<string, MediaSlot> = {
   academics_stage_middle: {
     id: "academics_stage_middle",
     section: "academics",
-    label: "Middle School Stage (Ages 11–13)",
-    description: "Representative photo of middle school learners developing critical thinking.",
+    label: "1. Every Age, Every Stage: Middle School (Ages 11–13)",
+    description: "Middle school learners developing critical thinking stage card.",
     aspectRatio: "4:3",
     recommendedDimensions: "1400x1050",
     currentUrl: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1800&q=85",
@@ -141,12 +245,22 @@ export const DEFAULT_SLOTS: Record<string, MediaSlot> = {
   academics_stage_high_school: {
     id: "academics_stage_high_school",
     section: "academics",
-    label: "High School Stage (Ages 14–18)",
-    description: "Representative photo of senior students preparing for university & leadership.",
+    label: "1. Every Age, Every Stage: High School (Ages 14–18)",
+    description: "Senior students preparing for university & leadership stage card.",
     aspectRatio: "4:3",
     recommendedDimensions: "1400x1050",
     currentUrl: "/grad_01.jpg",
     altText: "Senior high school students",
+  },
+  academics_learning_support: {
+    id: "academics_learning_support",
+    section: "academics",
+    label: "9. The Moment Students Understand: Learning Support Photo",
+    description: "Featured photography in 'Every learner deserves to be understood'.",
+    aspectRatio: "4:3",
+    recommendedDimensions: "1400x1050",
+    currentUrl: "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1800&q=85",
+    altText: "Student receiving individual learning support",
   },
   academics_abeka_feature: {
     id: "academics_abeka_feature",
@@ -180,12 +294,22 @@ export const DEFAULT_SLOTS: Record<string, MediaSlot> = {
     currentUrl: "https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=1600&q=90",
     altText: "Agape Academy campus grounds",
   },
+  admissions_moving_to_ghana: {
+    id: "admissions_moving_to_ghana",
+    section: "admissions",
+    label: "7. Moving to Ghana? Feature Photo",
+    description: "Cinematic photograph in the International Students & Relocation section.",
+    aspectRatio: "16:9",
+    recommendedDimensions: "1800x1200",
+    currentUrl: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1800&q=90",
+    altText: "Students from different international backgrounds at Agape",
+  },
 
   // Student Life
   student_life_hero: {
     id: "student_life_hero",
     section: "student_life",
-    label: "Student Life Hero Banner",
+    label: "11. Student Life Hero Banner",
     description: "Vibrant photo showcasing student activities outside the classroom.",
     aspectRatio: "16:9",
     recommendedDimensions: "2400x1350",
@@ -202,26 +326,24 @@ export const DEFAULT_SLOTS: Record<string, MediaSlot> = {
     currentUrl: "/games_3.jpg",
     altText: "Students competing on sports day",
   },
+  student_life_moments: {
+    id: "student_life_moments",
+    section: "student_life",
+    label: "9. The Moments Students Remember Photo",
+    description: "Cinematic split photo in Student Life for memorable student moments.",
+    aspectRatio: "4:3",
+    recommendedDimensions: "1600x1200",
+    currentUrl: "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1800&q=90",
+    altText: "Student participating actively in school life",
+  },
   student_life_community: {
     id: "student_life_community",
     section: "student_life",
-    label: "Growing Together Grid Photo",
+    label: "10. Growing Together Grid Photo",
     description: "Highlighting fellowship and collaboration in student community.",
     aspectRatio: "16:9",
     recommendedDimensions: "1800x1000",
     currentUrl: "/together.jpg",
     altText: "Students growing together",
-  },
-
-  // Contact Page
-  contact_hero: {
-    id: "contact_hero",
-    section: "about",
-    label: "Contact Page Hero Background",
-    description: "Atmospheric photo welcoming visitors to get in touch.",
-    aspectRatio: "16:9",
-    recommendedDimensions: "2000x1125",
-    currentUrl: "/changed.png",
-    altText: "Agape Academy International campus",
   },
 };

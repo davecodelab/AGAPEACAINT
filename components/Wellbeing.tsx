@@ -2,6 +2,7 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import SectionHeading from "./SectionHeading";
+import { useMediaSlot } from "@/lib/use-media-slots";
 
 const AREAS = [
   "Pastoral care", "Student support", "Teacher relationships",
@@ -10,6 +11,7 @@ const AREAS = [
 
 export default function Wellbeing() {
   const prefersReducedMotion = useReducedMotion();
+  const slot = useMediaSlot("home_wellbeing");
 
   return (
     <section className="px-6 py-20 sm:py-28 lg:px-10">
@@ -20,8 +22,14 @@ export default function Wellbeing() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: 0.6 }}
-            className="aspect-[4/3] w-full rounded-sm bg-gradient-to-br from-[#E12F41]/10 to-[#6C0798]/10"
-          />
+            className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-[#19151C]/5 shadow-sm"
+          >
+            <img
+              src={slot.currentUrl || "/together.jpg"}
+              alt={slot.altText || "Students connecting on campus"}
+              className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+            />
+          </motion.div>
           <div>
             <SectionHeading
               eyebrow="Wellbeing"

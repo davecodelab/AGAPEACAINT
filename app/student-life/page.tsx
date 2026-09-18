@@ -38,6 +38,8 @@ import {
   Stagger,
   StaggerItem,
 } from "@/components/Animations";
+import { useMediaSlot } from "@/lib/use-media-slots";
+import { isCloudinaryVideoUrl } from "@/lib/cloudinary";
 
 const activities = [
   {
@@ -107,6 +109,10 @@ const quickLinks = [
 
 export default function StudentLifePage() {
   const { scrollYProgress } = useScroll();
+  const heroSlot = useMediaSlot("student_life_hero");
+  const momentsSlot = useMediaSlot("student_life_moments");
+  const communitySlot = useMediaSlot("student_life_community");
+  const isVideoHero = isCloudinaryVideoUrl(heroSlot.currentUrl);
 
   const progress = useSpring(scrollYProgress, {
     stiffness: 100,
@@ -144,11 +150,22 @@ export default function StudentLifePage() {
     }}
     className="absolute inset-[-6%]"
   >
-    <img
-      src="https://images.unsplash.com/photo-1529390079861-591de354faf5?auto=format&fit=crop&w=2400&q=90"
-      alt="Students learning and connecting together"
-      className="h-full w-full object-cover object-[58%_center] sm:object-center"
-    />
+    {isVideoHero ? (
+      <video
+        src={heroSlot.currentUrl}
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="h-full w-full object-cover"
+      />
+    ) : (
+      <img
+        src={heroSlot.currentUrl || "https://images.unsplash.com/photo-1529390079861-591de354faf5?auto=format&fit=crop&w=2400&q=90"}
+        alt={heroSlot.altText || "Students learning and connecting together"}
+        className="h-full w-full object-cover object-[58%_center] sm:object-center"
+      />
+    )}
   </motion.div>
 
   {/* Dark cinematic overlay */}
@@ -356,8 +373,8 @@ export default function StudentLifePage() {
         <div className="mx-auto grid max-w-[1500px] lg:grid-cols-2">
           <div className="relative min-h-[65vh] overflow-hidden lg:min-h-[850px]">
             <ParallaxImage
-              src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1800&q=90"
-              alt="Student participating in school life"
+              src={momentsSlot.currentUrl || "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1800&q=90"}
+              alt={momentsSlot.altText || "Student participating in school life"}
               className="absolute inset-0 h-full w-full"
               intensity={12}
             />
@@ -820,8 +837,8 @@ export default function StudentLifePage() {
               className="group relative overflow-hidden rounded-[1.5rem] sm:rounded-[2rem] lg:col-span-7 lg:row-span-2"
             >
               <img
-                src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1800&q=90"
-                alt="Students in an educational environment"
+                src={communitySlot.currentUrl || "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1800&q=90"}
+                alt={communitySlot.altText || "Students in an educational environment"}
                 className="h-full min-h-[420px] w-full object-cover transition duration-1000 group-hover:scale-105"
               />
 

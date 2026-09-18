@@ -198,6 +198,7 @@ export default function AdminDashboardPage() {
     "Chapel",
     "Outdoor",
     "Student Life",
+    "Graduation",
   ];
 
   return (
@@ -312,7 +313,10 @@ export default function AdminDashboardPage() {
           <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {filteredSlots.map((slot) => {
               const isVideo = isCloudinaryVideoUrl(slot.currentUrl);
-              const isHero = slot.id === "home_hero";
+              const isHero =
+                slot.id === "home_hero" ||
+                slot.id === "academics_hero" ||
+                slot.id === "student_life_hero";
 
               return (
                 <div
@@ -553,7 +557,11 @@ export default function AdminDashboardPage() {
           targetAspectRatio={targetSlot.aspectRatio}
           recommendedDimensions={targetSlot.recommendedDimensions}
           initialAltText={targetSlot.altText}
-          allowVideo={targetSlot.id === "home_hero"}
+          allowVideo={
+            targetSlot.id === "home_hero" ||
+            targetSlot.id === "academics_hero" ||
+            targetSlot.id === "student_life_hero"
+          }
         />
       )}
     </div>
