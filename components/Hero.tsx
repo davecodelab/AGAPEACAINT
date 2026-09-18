@@ -3,20 +3,13 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
-<<<<<<< HEAD
 import { ArrowRight, Play } from "lucide-react";
-=======
-import { ArrowRight } from "lucide-react";
-import { useMediaSlot } from "@/lib/use-media-slots";
-import { isCloudinaryUrl } from "@/lib/cloudinary";
->>>>>>> 17750498fe13fd6e747a49334c431331a28f4c51
 
 export default function Hero() {
   const prefersReducedMotion = useReducedMotion();
-  const heroSlot = useMediaSlot("home_hero");
+
 
   return (
-<<<<<<< HEAD
     <section className="relative flex h-[92svh] min-h-[620px] w-full items-end overflow-hidden bg-[#19151C]">
       {/* Background video */}
       <div className="absolute inset-0">
@@ -36,25 +29,6 @@ export default function Hero() {
           />
         </video>
       </div>
-=======
-    <section className="relative flex h-[92vh] min-h-[620px] w-full items-end overflow-hidden bg-[#19151C]">
-      {/* Background Photography (Dynamic from Media CMS) */}
-      {heroSlot.currentUrl && (
-        <Image
-          src={heroSlot.currentUrl}
-          alt={heroSlot.altText || "Agape Academy campus and students"}
-          fill
-          priority
-          quality={90}
-          unoptimized={isCloudinaryUrl(heroSlot.currentUrl)}
-          className="object-cover object-center opacity-45"
-        />
-      )}
-
-      {/* Cinematic brand gradient overlays */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#4B075F]/60 via-[#19151C]/75 to-[#6C0798]/30" />
-      <div className="absolute inset-0 bg-gradient-to-t from-[#19151C] via-[#19151C]/40 to-transparent" />
->>>>>>> 17750498fe13fd6e747a49334c431331a28f4c51
 
       {/* Dark cinematic overlay */}
       <div className="absolute inset-0 bg-[#19151C]/45" />
