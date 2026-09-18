@@ -923,8 +923,8 @@ video {
 .h-\[65\%\] {
   height: 65%;
 }
-.h-\[92vh\] {
-  height: 92vh;
+.h-\[92svh\] {
+  height: 92svh;
 }
 .h-full {
   height: 100%;
@@ -1437,6 +1437,9 @@ video {
 .bg-\[\#19151C\]\/30 {
   background-color: rgb(25 21 28 / 0.3);
 }
+.bg-\[\#19151C\]\/45 {
+  background-color: rgb(25 21 28 / 0.45);
+}
 .bg-\[\#19151C\]\/5 {
   background-color: rgb(25 21 28 / 0.05);
 }
@@ -1596,13 +1599,13 @@ video {
   --tw-gradient-to: rgb(25 21 28 / 0) var(--tw-gradient-to-position);
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
 }
-.from-\[\#4B075F\] {
-  --tw-gradient-from: #4B075F var(--tw-gradient-from-position);
+.from-\[\#4B075F\]\/15 {
+  --tw-gradient-from: rgb(75 7 95 / 0.15) var(--tw-gradient-from-position);
   --tw-gradient-to: rgb(75 7 95 / 0) var(--tw-gradient-to-position);
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
 }
-.from-\[\#4B075F\]\/15 {
-  --tw-gradient-from: rgb(75 7 95 / 0.15) var(--tw-gradient-from-position);
+.from-\[\#4B075F\]\/55 {
+  --tw-gradient-from: rgb(75 7 95 / 0.55) var(--tw-gradient-from-position);
   --tw-gradient-to: rgb(75 7 95 / 0) var(--tw-gradient-to-position);
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
 }
@@ -1631,10 +1634,6 @@ video {
   --tw-gradient-to: rgb(225 47 65 / 0) var(--tw-gradient-to-position);
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
 }
-.via-\[\#19151C\] {
-  --tw-gradient-to: rgb(25 21 28 / 0)  var(--tw-gradient-to-position);
-  --tw-gradient-stops: var(--tw-gradient-from), #19151C var(--tw-gradient-via-position), var(--tw-gradient-to);
-}
 .via-\[\#19151C\]\/20 {
   --tw-gradient-to: rgb(25 21 28 / 0)  var(--tw-gradient-to-position);
   --tw-gradient-stops: var(--tw-gradient-from), rgb(25 21 28 / 0.2) var(--tw-gradient-via-position), var(--tw-gradient-to);
@@ -1650,6 +1649,10 @@ video {
 .via-\[\#19151C\]\/45 {
   --tw-gradient-to: rgb(25 21 28 / 0)  var(--tw-gradient-to-position);
   --tw-gradient-stops: var(--tw-gradient-from), rgb(25 21 28 / 0.45) var(--tw-gradient-via-position), var(--tw-gradient-to);
+}
+.via-\[\#19151C\]\/65 {
+  --tw-gradient-to: rgb(25 21 28 / 0)  var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), rgb(25 21 28 / 0.65) var(--tw-gradient-via-position), var(--tw-gradient-to);
 }
 .via-\[\#8B176F\] {
   --tw-gradient-to: rgb(139 23 111 / 0)  var(--tw-gradient-to-position);
@@ -1674,8 +1677,8 @@ video {
 .to-\[\#6C0798\]\/10 {
   --tw-gradient-to: rgb(108 7 152 / 0.1) var(--tw-gradient-to-position);
 }
-.to-\[\#6C0798\]\/40 {
-  --tw-gradient-to: rgb(108 7 152 / 0.4) var(--tw-gradient-to-position);
+.to-\[\#6C0798\]\/20 {
+  --tw-gradient-to: rgb(108 7 152 / 0.2) var(--tw-gradient-to-position);
 }
 .to-\[\#E12F41\]\/20 {
   --tw-gradient-to: rgb(225 47 65 / 0.2) var(--tw-gradient-to-position);
@@ -2271,6 +2274,10 @@ video {
 }
 .backdrop-blur-md {
   --tw-backdrop-blur: blur(12px);
+  backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
+}
+.backdrop-blur-sm {
+  --tw-backdrop-blur: blur(4px);
   backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
 }
 .backdrop-blur-xl {
