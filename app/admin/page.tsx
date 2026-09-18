@@ -15,9 +15,9 @@ import {
   List,
 } from "lucide-react";
 import ImageUploadModal from "@/components/admin/ImageUploadModal";
-import { MediaSlot, GalleryPhoto, DEFAULT_SLOTS } from "@/lib/media-slots";
-import { invalidateSlotsCache } from "@/lib/use-media-slots";
-import { isCloudinaryVideoUrl } from "@/lib/cloudinary";
+import { MediaSlot, GalleryPhoto, DEFAULT_SLOTS } from "../../lib/media-slots";
+import { invalidateSlotsCache } from "../../lib/use-media-slots";
+import { isCloudinaryVideoUrl } from "../../lib/cloudinary";
 
 export default function AdminDashboardPage() {
   const [activeTab, setActiveTab] = useState<"slots" | "gallery">("slots");

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { supabase, isSupabaseConfigured } from "@/lib/supabase";
-import { DEFAULT_SLOTS, MediaSlot } from "@/lib/media-slots";
+import { supabase, isSupabaseConfigured } from "../../../../lib/supabase";
+import { DEFAULT_SLOTS, MediaSlot } from "../../../../lib/media-slots";
 
 export async function GET() {
   try {

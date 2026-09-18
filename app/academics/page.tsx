@@ -26,8 +26,8 @@ import {
   Reveal,
 } from "@/components/Animations";
 import AgapeCTA from "@/components/AgapeCTA";
-import { useMediaSlot } from "@/lib/use-media-slots";
-import { isCloudinaryVideoUrl } from "@/lib/cloudinary";
+import { useMediaSlot } from "../../lib/use-media-slots";
+import { isCloudinaryVideoUrl } from "../../lib/cloudinary";
 
 /* -------------------------------------------------------------------------- */
 /* Academic stages */

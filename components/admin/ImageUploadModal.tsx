@@ -2,8 +2,8 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { X, UploadCloud, Loader2, ArrowRight, Video, Image as ImageIcon } from "lucide-react";
-import { optimizeImageInBrowser, formatBytes, OptimizationResult } from "@/lib/image-optimizer";
-import { uploadToCloudinary } from "@/lib/cloudinary";
+import { optimizeImageInBrowser, formatBytes, OptimizationResult } from "../../lib/image-optimizer";
+import { uploadToCloudinary } from "../../lib/cloudinary";
 
 interface ImageUploadModalProps {
   isOpen: boolean;

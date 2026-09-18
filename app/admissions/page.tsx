@@ -40,7 +40,7 @@ import {
   StaggerItem,
 } from "@/components/Animations";
 import AgapeCTA from "@/components/AgapeCTA";
-import { useMediaSlot } from "@/lib/use-media-slots";
+import { useMediaSlot } from "../../lib/use-media-slots";
 
 const admissionSections = [
   {

@@ -6,7 +6,7 @@ import { ArrowRight } from "lucide-react";
 import SectionHeading from "./SectionHeading";
 import Image from "next/image";
 
-import { useMediaSlot } from "@/lib/use-media-slots";
+import { useMediaSlot } from "../lib/use-media-slots";
 
 const PILLARS = [
   { title: "Academic Excellence", body: "A rigorous, well-rounded curriculum that stretches every learner." },

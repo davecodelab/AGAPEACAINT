@@ -38,8 +38,8 @@ import {
   Stagger,
   StaggerItem,
 } from "@/components/Animations";
-import { useMediaSlot } from "@/lib/use-media-slots";
-import { isCloudinaryVideoUrl } from "@/lib/cloudinary";
+import { useMediaSlot } from "../../lib/use-media-slots";
+import { isCloudinaryVideoUrl } from "../../lib/cloudinary";
 
 const activities = [
   {

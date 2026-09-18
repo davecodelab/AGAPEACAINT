@@ -2,7 +2,7 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import SectionHeading from "./SectionHeading";
-import { useMediaSlot } from "@/lib/use-media-slots";
+import { useMediaSlot } from "../lib/use-media-slots";
 
 const AREAS = [
   "Pastoral care", "Student support", "Teacher relationships",

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import SectionHeading from "./SectionHeading";
-import { useMediaSlot } from "@/lib/use-media-slots";
+import { useMediaSlot } from "../lib/use-media-slots";
 
 export default function PrincipalMessage() {
   const prefersReducedMotion = useReducedMotion();
