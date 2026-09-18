@@ -3,16 +3,13 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import {
-  Layers,
-  Image as ImageIcon,
   UploadCloud,
   CheckCircle2,
   AlertTriangle,
   RefreshCw,
   Plus,
   Trash2,
-  ExternalLink,
-  Sparkles,
+  Camera,
 } from "lucide-react";
 import ImageUploadModal from "@/components/admin/ImageUploadModal";
 import { MediaSlot, GalleryPhoto, DEFAULT_SLOTS } from "@/lib/media-slots";
@@ -42,7 +39,6 @@ export default function AdminDashboardPage() {
   const fetchSlotsAndGallery = async () => {
     setLoading(true);
     try {
-      // Fetch Slots
       const slotsRes = await fetch("/api/admin/slots");
       const slotsData = await slotsRes.json();
       if (slotsData.success && slotsData.slots) {
@@ -50,7 +46,6 @@ export default function AdminDashboardPage() {
         setIsSupabaseConnected(slotsData.isSupabaseConnected);
       }
 
-      // Fetch Gallery
       const galRes = await fetch("/api/admin/gallery");
       const galData = await galRes.json();
       if (galData.success && galData.photos) {
@@ -69,7 +64,7 @@ export default function AdminDashboardPage() {
 
   const triggerNotification = (type: "success" | "error", message: string) => {
     setNotification({ type, message });
-    setTimeout(() => setNotification(null), 5000);
+    setTimeout(() => setNotification(null), 4000);
   };
 
   const handleSlotUploadSuccess = async (data: {
@@ -79,7 +74,6 @@ export default function AdminDashboardPage() {
   }) => {
     if (!targetSlot) return;
 
-    // Optimistically update UI
     setSlots((prev) =>
       prev.map((s) =>
         s.id === targetSlot.id
@@ -107,19 +101,13 @@ export default function AdminDashboardPage() {
 
       const resData = await res.json();
       if (!res.ok || !resData.success) {
-        throw new Error(resData.error || "Failed to update slot in database");
+        throw new Error(resData.error || "Failed to save update to database");
       }
 
       invalidateSlotsCache();
-      triggerNotification(
-        "success",
-        `Successfully updated "${targetSlot.label}" with optimized Cloudinary image.`
-      );
+      triggerNotification("success", `Updated "${targetSlot.label}" successfully.`);
     } catch (err: any) {
-      triggerNotification(
-        "error",
-        err.message || "Failed to save update to database"
-      );
+      triggerNotification("error", err.message || "Failed to update photo");
     }
   };
 
@@ -135,7 +123,7 @@ export default function AdminDashboardPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           category: newGalleryCategory,
-          title: data.title || "Campus Photograph",
+          title: data.title || "Campus Photo",
           caption: data.altText || "",
           cloudinary_url: data.cloudinaryUrl,
           cloudinary_public_id: data.cloudinaryPublicId,
@@ -150,15 +138,15 @@ export default function AdminDashboardPage() {
       setGalleryPhotos((prev) => [resData.photo, ...prev]);
       triggerNotification(
         "success",
-        `Added new photo to "${newGalleryCategory}" gallery.`
+        `Added new photo to "${newGalleryCategory}".`
       );
     } catch (err: any) {
-      triggerNotification("error", err.message || "Failed to add to gallery");
+      triggerNotification("error", err.message || "Failed to add photo");
     }
   };
 
   const handleDeleteGalleryPhoto = async (id: string) => {
-    if (!confirm("Are you sure you want to remove this photo from the gallery?"))
+    if (!confirm("Are you sure you want to delete this photo from the gallery?"))
       return;
 
     try {
@@ -189,13 +177,13 @@ export default function AdminDashboardPage() {
       : galleryPhotos.filter((p) => p.category === selectedCategory);
 
   const sections = [
-    { id: "all", label: "All Slots" },
+    { id: "all", label: "All Sections" },
     { id: "homepage", label: "Homepage" },
     { id: "about", label: "About" },
     { id: "academics", label: "Academics" },
     { id: "admissions", label: "Admissions" },
     { id: "student_life", label: "Student Life" },
-    { id: "brand", label: "Brand / Logo" },
+    { id: "brand", label: "Brand Logos" },
   ];
 
   const galleryCategories = [
@@ -211,102 +199,94 @@ export default function AdminDashboardPage() {
   ];
 
   return (
-    <div className="mx-auto max-w-7xl px-6 py-8 sm:px-8">
+    <div className="mx-auto max-w-7xl px-6 py-10 sm:px-10 lg:px-12">
       {/* Toast Notification */}
       {notification && (
         <div
-          className={`fixed bottom-6 right-6 z-50 flex items-center gap-3 rounded-xl border p-4 shadow-xl backdrop-blur-md ${
+          className={`fixed bottom-6 right-6 z-50 flex max-w-sm items-center gap-3 rounded-xl border p-4 shadow-lg transition-all ${
             notification.type === "success"
-              ? "border-emerald-300 bg-emerald-50 text-emerald-900"
-              : "border-red-300 bg-red-50 text-red-900"
+              ? "border-emerald-200 bg-white text-[#19151C]"
+              : "border-red-200 bg-white text-red-900"
           }`}
         >
           {notification.type === "success" ? (
-            <CheckCircle2 className="text-emerald-600" size={18} />
+            <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
+              <CheckCircle2 size={16} />
+            </div>
           ) : (
-            <AlertTriangle className="text-red-600" size={18} />
+            <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-red-100 text-red-700">
+              <AlertTriangle size={16} />
+            </div>
           )}
-          <span className="font-sans text-xs font-medium">
+          <p className="font-sans text-xs leading-relaxed">
             {notification.message}
-          </span>
+          </p>
         </div>
       )}
 
-      {/* Hero Banner */}
-      <div className="flex flex-col justify-between gap-6 border-b border-[#19151C]/10 pb-8 sm:flex-row sm:items-end">
-        <div>
-          <span className="font-sans text-xs font-semibold uppercase tracking-[0.2em] text-[#6C0798]">
-            Administration Panel
-          </span>
-          <h1 className="mt-1 font-serif text-3xl text-[#19151C] sm:text-4xl">
-            Media & Image Management
-          </h1>
-          <p className="mt-2 max-w-2xl font-sans text-sm text-[#19151C]/60">
-            Upload, optimize, and organize high-resolution photography for Agape
-            Academy. All uploads are compressed in your browser before saving to
-            Cloudinary.
-          </p>
-        </div>
+      {/* Page Header */}
+      <section className="border-b border-[#19151C]/10 pb-8">
+        <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
+          <div>
+            <p className="font-sans text-xs font-semibold uppercase tracking-wider text-[#6C0798]">
+              Admin Panel
+            </p>
+            <h1 className="mt-2 font-serif text-3xl text-[#19151C] sm:text-4xl">
+              Website Photos
+            </h1>
+            <p className="mt-2 max-w-2xl font-sans text-sm leading-relaxed text-[#19151C]/65">
+              Review and update the images across the school website. When you upload a picture,
+              it is resized and compressed in your browser so pages load fast.
+            </p>
+          </div>
 
-        {/* Database Status Indicator */}
-        <div className="flex items-center gap-3">
-          <div
-            className={`flex items-center gap-2 rounded-full border px-3.5 py-1.5 font-sans text-xs font-medium ${
-              isSupabaseConnected
-                ? "border-emerald-200 bg-emerald-50 text-emerald-800"
-                : "border-amber-200 bg-amber-50 text-amber-800"
-            }`}
-          >
-            <div
+          {/* Database status pill */}
+          <div className="flex shrink-0 items-center gap-3 rounded-full border border-[#19151C]/10 bg-white px-4 py-2 shadow-sm">
+            <span
               className={`h-2 w-2 rounded-full ${
                 isSupabaseConnected ? "bg-emerald-500" : "bg-amber-500"
               }`}
             />
-            <span>
-              {isSupabaseConnected
-                ? "Supabase Connected"
-                : "Local Fallback Mode"}
+            <span className="font-sans text-xs font-medium text-[#19151C]/80">
+              {isSupabaseConnected ? "Connected to Supabase" : "Local mode (in memory)"}
             </span>
+            <button
+              onClick={fetchSlotsAndGallery}
+              title="Refresh"
+              className="text-[#19151C]/40 transition-colors hover:text-[#6C0798]"
+            >
+              <RefreshCw size={13} className={loading ? "animate-spin" : ""} />
+            </button>
           </div>
+        </div>
+
+        {/* Navigation Tabs */}
+        <div className="mt-8 flex items-center gap-3">
+          <button
+            onClick={() => setActiveTab("slots")}
+            className={`rounded-full px-5 py-2 font-sans text-sm font-medium transition-colors ${
+              activeTab === "slots"
+                ? "bg-[#6C0798] text-white shadow-sm"
+                : "bg-white text-[#19151C]/70 border border-[#19151C]/10 hover:border-[#6C0798]/40 hover:text-[#19151C]"
+            }`}
+          >
+            Website Pages ({slots.length})
+          </button>
 
           <button
-            onClick={fetchSlotsAndGallery}
-            className="rounded-full border border-[#19151C]/10 p-2 text-[#19151C]/60 hover:bg-white hover:text-[#19151C]"
-            title="Refresh CMS data"
+            onClick={() => setActiveTab("gallery")}
+            className={`rounded-full px-5 py-2 font-sans text-sm font-medium transition-colors ${
+              activeTab === "gallery"
+                ? "bg-[#6C0798] text-white shadow-sm"
+                : "bg-white text-[#19151C]/70 border border-[#19151C]/10 hover:border-[#6C0798]/40 hover:text-[#19151C]"
+            }`}
           >
-            <RefreshCw size={15} />
+            Campus Gallery ({galleryPhotos.length})
           </button>
         </div>
-      </div>
+      </section>
 
-      {/* Tabs */}
-      <div className="mt-8 flex items-center gap-4 border-b border-[#19151C]/10">
-        <button
-          onClick={() => setActiveTab("slots")}
-          className={`flex items-center gap-2 border-b-2 pb-3 font-sans text-sm font-semibold transition-colors ${
-            activeTab === "slots"
-              ? "border-[#6C0798] text-[#6C0798]"
-              : "border-transparent text-[#19151C]/50 hover:text-[#19151C]"
-          }`}
-        >
-          <Layers size={16} />
-          <span>Website Slots ({slots.length})</span>
-        </button>
-
-        <button
-          onClick={() => setActiveTab("gallery")}
-          className={`flex items-center gap-2 border-b-2 pb-3 font-sans text-sm font-semibold transition-colors ${
-            activeTab === "gallery"
-              ? "border-[#6C0798] text-[#6C0798]"
-              : "border-transparent text-[#19151C]/50 hover:text-[#19151C]"
-          }`}
-        >
-          <ImageIcon size={16} />
-          <span>Campus Gallery ({galleryPhotos.length})</span>
-        </button>
-      </div>
-
-      {/* TAB 1: WEBSITE SLOTS */}
+      {/* TAB 1: WEBSITE PAGE SLOTS */}
       {activeTab === "slots" && (
         <div className="mt-8">
           {/* Section Filter Pills */}
@@ -315,10 +295,10 @@ export default function AdminDashboardPage() {
               <button
                 key={sec.id}
                 onClick={() => setSelectedSection(sec.id)}
-                className={`rounded-full px-4 py-1.5 font-sans text-xs font-medium transition-all ${
+                className={`rounded-full border px-4 py-1.5 font-sans text-xs transition-colors ${
                   selectedSection === sec.id
-                    ? "bg-[#6C0798] text-white"
-                    : "border border-[#19151C]/10 bg-white text-[#19151C]/70 hover:border-[#6C0798]/30"
+                    ? "border-[#6C0798] bg-[#6C0798] text-white shadow-sm"
+                    : "border-[#19151C]/15 bg-white text-[#19151C]/70 hover:border-[#6C0798]/40 hover:text-[#19151C]"
                 }`}
               >
                 {sec.label}
@@ -326,61 +306,77 @@ export default function AdminDashboardPage() {
             ))}
           </div>
 
-          {/* Slots Grid */}
+          {/* Cards Grid */}
           <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {filteredSlots.map((slot) => (
               <div
                 key={slot.id}
-                className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-[#19151C]/10 bg-white shadow-sm transition-all hover:border-[#6C0798]/30 hover:shadow-md"
+                className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-[#19151C]/10 bg-white shadow-sm transition-all duration-200 hover:border-[#6C0798]/30 hover:shadow-md"
               >
-                {/* Image Preview */}
-                <div className="relative aspect-video w-full overflow-hidden bg-[#19151C]/5">
+                {/* Photo Presentation */}
+                <div
+                  onClick={() => {
+                    setTargetSlot(slot);
+                    setIsGalleryUpload(false);
+                    setUploadModalOpen(true);
+                  }}
+                  className="relative aspect-[16/10] w-full cursor-pointer overflow-hidden bg-[#FAF8F9]"
+                >
                   <img
                     src={slot.currentUrl}
                     alt={slot.altText || slot.label}
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
                   />
-                  <div className="absolute left-3 top-3 flex items-center gap-1.5 rounded-md bg-black/60 px-2.5 py-1 font-sans text-[10px] font-semibold uppercase tracking-wider text-white backdrop-blur-md">
-                    <span>{slot.section}</span>
-                    <span>·</span>
-                    <span>{slot.aspectRatio}</span>
+
+                  {/* Gentle hover prompt */}
+                  <div className="absolute inset-0 flex items-center justify-center bg-[#19151C]/30 opacity-0 backdrop-blur-[1px] transition-opacity duration-200 group-hover:opacity-100">
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-3.5 py-1.5 font-sans text-xs font-semibold text-[#19151C] shadow-md">
+                      <Camera size={13} />
+                      <span>Change photo</span>
+                    </span>
                   </div>
 
+                  {/* Status chip if updated */}
                   {slot.currentUrl.includes("cloudinary") && (
-                    <div className="absolute right-3 top-3 rounded-full bg-[#6C0798] p-1 text-white shadow-lg">
-                      <Sparkles size={12} />
-                    </div>
+                    <span className="absolute right-3 top-3 rounded-full bg-white/95 px-2.5 py-0.5 font-sans text-[10px] font-medium text-[#6C0798] shadow-sm backdrop-blur-sm">
+                      Updated photo
+                    </span>
                   )}
                 </div>
 
-                {/* Content */}
+                {/* Card Information */}
                 <div className="flex flex-1 flex-col justify-between p-5">
                   <div>
-                    <h3 className="font-serif text-lg text-[#19151C]">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="rounded-full bg-[#6C0798]/10 px-2.5 py-0.5 font-sans text-[11px] font-semibold text-[#6C0798] capitalize">
+                        {slot.section.replace("_", " ")}
+                      </span>
+                      <span className="font-sans text-xs text-[#19151C]/45">
+                        {slot.recommendedDimensions}
+                      </span>
+                    </div>
+
+                    <h2 className="mt-2.5 font-serif text-lg text-[#19151C]">
                       {slot.label}
-                    </h3>
-                    <p className="mt-1 font-sans text-xs text-[#19151C]/60">
+                    </h2>
+
+                    <p className="mt-1 font-sans text-xs leading-relaxed text-[#19151C]/60">
                       {slot.description}
                     </p>
                   </div>
 
-                  <div className="mt-6 flex items-center justify-between border-t border-[#19151C]/5 pt-4">
-                    <span className="font-sans text-[11px] text-[#19151C]/45">
-                      Rec: {slot.recommendedDimensions}
-                    </span>
-
-                    <button
-                      onClick={() => {
-                        setTargetSlot(slot);
-                        setIsGalleryUpload(false);
-                        setUploadModalOpen(true);
-                      }}
-                      className="inline-flex items-center gap-1.5 rounded-full bg-[#6C0798]/10 px-4 py-1.5 font-sans text-xs font-semibold text-[#6C0798] transition-colors hover:bg-[#6C0798] hover:text-white"
-                    >
-                      <UploadCloud size={13} />
-                      <span>Update Photo</span>
-                    </button>
-                  </div>
+                  {/* Action Button */}
+                  <button
+                    onClick={() => {
+                      setTargetSlot(slot);
+                      setIsGalleryUpload(false);
+                      setUploadModalOpen(true);
+                    }}
+                    className="mt-4 inline-flex w-full items-center justify-center gap-1.5 rounded-full border border-[#19151C]/15 bg-white py-2 font-sans text-xs font-medium text-[#19151C] transition-all hover:border-[#6C0798] hover:bg-[#6C0798] hover:text-white"
+                  >
+                    <UploadCloud size={14} />
+                    <span>Change photo</span>
+                  </button>
                 </div>
               </div>
             ))}
@@ -398,13 +394,13 @@ export default function AdminDashboardPage() {
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
-                  className={`rounded-full px-3.5 py-1.5 font-sans text-xs font-medium capitalize transition-all ${
+                  className={`rounded-full border px-4 py-1.5 font-sans text-xs capitalize transition-colors ${
                     selectedCategory === cat
-                      ? "bg-[#6C0798] text-white"
-                      : "border border-[#19151C]/10 bg-white text-[#19151C]/70 hover:border-[#6C0798]/30"
+                      ? "border-[#6C0798] bg-[#6C0798] text-white shadow-sm"
+                      : "border-[#19151C]/15 bg-white text-[#19151C]/70 hover:border-[#6C0798]/40 hover:text-[#19151C]"
                   }`}
                 >
-                  {cat}
+                  {cat === "all" ? "All categories" : cat}
                 </button>
               ))}
             </div>
@@ -415,8 +411,8 @@ export default function AdminDashboardPage() {
                 setTargetSlot({
                   id: "gallery_photo",
                   section: "about",
-                  label: "New Gallery Photo",
-                  description: "Campus gallery photograph",
+                  label: "New Campus Photo",
+                  description: "Upload a new photo for the campus gallery",
                   aspectRatio: "4:3",
                   recommendedDimensions: "1600x1200",
                   currentUrl: "",
@@ -425,59 +421,79 @@ export default function AdminDashboardPage() {
                 setIsGalleryUpload(true);
                 setUploadModalOpen(true);
               }}
-              className="inline-flex items-center gap-2 rounded-full bg-[#6C0798] px-5 py-2 font-sans text-xs font-semibold text-white shadow-md transition-all hover:bg-[#4B075F]"
+              className="inline-flex shrink-0 items-center gap-2 rounded-full bg-[#6C0798] px-5 py-2 font-sans text-xs font-medium text-white shadow-sm transition-colors hover:bg-[#4B075F]"
             >
               <Plus size={15} />
-              <span>Add Gallery Photo</span>
+              <span>Add photo to gallery</span>
             </button>
+          </div>
+
+          {/* Gallery Category Selector for new photo (when uploading) */}
+          <div className="mt-4 flex items-center gap-2 font-sans text-xs text-[#19151C]/70">
+            <span>Uploading to category:</span>
+            <select
+              value={newGalleryCategory}
+              onChange={(e) => setNewGalleryCategory(e.target.value)}
+              className="rounded-lg border border-[#19151C]/15 bg-white px-2.5 py-1 text-xs text-[#19151C] outline-none focus:border-[#6C0798]"
+            >
+              {galleryCategories
+                .filter((c) => c !== "all")
+                .map((cat) => (
+                  <option key={cat} value={cat}>
+                    {cat}
+                  </option>
+                ))}
+            </select>
           </div>
 
           {/* Gallery Grid */}
           {filteredGallery.length === 0 ? (
-            <div className="mt-12 flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-[#19151C]/10 bg-white py-16 text-center">
-              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#6C0798]/10 text-[#6C0798]">
-                <ImageIcon size={28} />
+            <div className="mt-12 flex flex-col items-center justify-center rounded-2xl border border-dashed border-[#19151C]/15 bg-white p-12 text-center">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#6C0798]/10 text-[#6C0798]">
+                <Camera size={22} />
               </div>
-              <h3 className="mt-4 font-serif text-lg text-[#19151C]">
+              <h3 className="mt-4 font-serif text-xl text-[#19151C]">
                 No photos in this category yet
               </h3>
-              <p className="mt-1 font-sans text-xs text-[#19151C]/50">
-                Click "Add Gallery Photo" to optimize and upload a photograph to
-                Cloudinary.
+              <p className="mt-1 max-w-sm font-sans text-xs text-[#19151C]/60">
+                Click &quot;Add photo to gallery&quot; above to upload a new picture for this section.
               </p>
             </div>
           ) : (
-            <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
               {filteredGallery.map((photo) => (
                 <div
                   key={photo.id}
-                  className="group relative overflow-hidden rounded-2xl border border-[#19151C]/10 bg-white shadow-sm transition-all hover:shadow-md"
+                  className="group relative flex flex-col overflow-hidden rounded-2xl border border-[#19151C]/10 bg-white shadow-sm transition-all hover:shadow-md"
                 >
-                  <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#19151C]/5">
+                  <div className="relative aspect-[4/5] w-full overflow-hidden bg-[#FAF8F9]">
                     <img
                       src={photo.cloudinaryUrl}
                       alt={photo.title}
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                     />
-                    <div className="absolute left-3 top-3 rounded-md bg-black/60 px-2 py-0.5 font-sans text-[10px] font-semibold text-white backdrop-blur-md">
-                      {photo.category}
-                    </div>
 
+                    {/* Category badge */}
+                    <span className="absolute left-2.5 top-2.5 rounded-full bg-white/90 px-2.5 py-0.5 font-sans text-[10px] font-medium text-[#19151C] shadow-sm backdrop-blur-sm">
+                      {photo.category}
+                    </span>
+
+                    {/* Delete button */}
                     <button
                       onClick={() => handleDeleteGalleryPhoto(photo.id)}
-                      className="absolute right-3 top-3 rounded-full bg-red-600/80 p-1.5 text-white opacity-0 transition-all hover:bg-red-600 group-hover:opacity-100"
+                      className="absolute right-2.5 top-2.5 flex h-7 w-7 items-center justify-center rounded-full bg-white/90 text-[#19151C]/60 opacity-0 shadow-sm transition-all duration-200 group-hover:opacity-100 hover:bg-red-600 hover:text-white"
                       title="Delete photo"
                     >
                       <Trash2 size={13} />
                     </button>
                   </div>
 
-                  <div className="p-4">
-                    <h4 className="font-serif text-base text-[#19151C]">
+                  <div className="p-3.5">
+                    <h3 className="font-serif text-sm font-medium text-[#19151C]">
                       {photo.title}
-                    </h4>
+                    </h3>
                     {photo.caption && (
-                      <p className="mt-1 line-clamp-2 font-sans text-xs text-[#19151C]/60">
+                      <p className="mt-0.5 line-clamp-1 font-sans text-xs text-[#19151C]/60">
                         {photo.caption}
                       </p>
                     )}
@@ -489,7 +505,7 @@ export default function AdminDashboardPage() {
         </div>
       )}
 
-      {/* Upload & Optimizer Modal */}
+      {/* Upload Modal */}
       {uploadModalOpen && targetSlot && (
         <ImageUploadModal
           isOpen={uploadModalOpen}
@@ -516,3 +532,4 @@ export default function AdminDashboardPage() {
     </div>
   );
 }
+

@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useRef } from "react";
-import { X, UploadCloud, CheckCircle2, AlertCircle, Sparkles, ArrowRight, Loader2 } from "lucide-react";
+import React, { useState, useRef, useEffect } from "react";
+import { X, UploadCloud, Loader2, ArrowRight, Check } from "lucide-react";
 import { optimizeImageInBrowser, formatBytes, OptimizationResult } from "@/lib/image-optimizer";
 import { uploadToCloudinary } from "@/lib/cloudinary";
 
@@ -46,7 +46,7 @@ export default function ImageUploadModal({
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!isOpen) return;
 
     const handlePaste = (e: ClipboardEvent) => {
@@ -81,7 +81,7 @@ export default function ImageUploadModal({
 
   const handleFile = async (file: File) => {
     if (!file.type.startsWith("image/")) {
-      setError("Please select a valid image file (JPEG, PNG, WebP).");
+      setError("Please select a valid image file (JPG, PNG, or WebP).");
       return;
     }
 
@@ -90,7 +90,6 @@ export default function ImageUploadModal({
     setOptResult(null);
 
     try {
-      // Determine max dimensions based on target aspect
       let maxWidth = 2560;
       if (slotId.includes("portrait") || slotId.includes("principal")) {
         maxWidth = 1200;
@@ -107,7 +106,7 @@ export default function ImageUploadModal({
 
       setOptResult(result);
     } catch (err: any) {
-      setError(err.message || "Failed to optimize image");
+      setError(err.message || "Failed to process the image. Please try again.");
     } finally {
       setOptimizing(false);
     }
@@ -155,7 +154,7 @@ export default function ImageUploadModal({
       onClose();
     } catch (err: any) {
       setError(
-        err.message || "Upload failed. Please check your Cloudinary settings in .env.local"
+        err.message || "Upload failed. Please check your internet connection."
       );
     } finally {
       setUploading(false);
@@ -163,41 +162,47 @@ export default function ImageUploadModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm sm:p-6">
-      <div className="relative w-full max-w-2xl overflow-hidden rounded-2xl bg-white shadow-2xl">
-        {/* Header */}
-        <div className="flex items-center justify-between border-b border-[#19151C]/10 bg-[#FAF8F9] px-6 py-5">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#19151C]/60 p-4 backdrop-blur-sm sm:p-6">
+      <div className="relative w-full max-w-xl overflow-hidden rounded-2xl border border-[#19151C]/10 bg-white shadow-2xl">
+        {/* Modal Header */}
+        <div className="flex items-start justify-between border-b border-[#19151C]/10 bg-[#FAF8F9] px-6 py-5 sm:px-8">
           <div>
-            <span className="font-sans text-xs font-semibold uppercase tracking-[0.18em] text-[#6C0798]">
-              {section} · {targetAspectRatio}
-            </span>
-            <h3 className="mt-0.5 font-serif text-xl text-[#19151C]">{title}</h3>
+            <div className="flex items-center gap-2">
+              <span className="rounded-full bg-[#6C0798]/10 px-2.5 py-0.5 font-sans text-xs font-semibold text-[#6C0798]">
+                {section}
+              </span>
+              <span className="font-sans text-xs text-[#19151C]/50">
+                Recommended: {recommendedDimensions} ({targetAspectRatio})
+              </span>
+            </div>
+            <h2 className="mt-2 font-serif text-xl text-[#19151C] sm:text-2xl">
+              {title}
+            </h2>
+            {description && (
+              <p className="mt-1 font-sans text-xs text-[#19151C]/60">
+                {description}
+              </p>
+            )}
           </div>
+
           <button
             onClick={onClose}
-            className="rounded-full p-2 text-[#19151C]/50 hover:bg-[#19151C]/5 hover:text-[#19151C]"
+            aria-label="Close"
+            className="flex h-8 w-8 items-center justify-center rounded-full text-[#19151C]/40 transition-colors hover:bg-[#19151C]/5 hover:text-[#19151C]"
           >
-            <X size={20} />
+            <X size={18} />
           </button>
         </div>
 
-        {/* Content */}
-        <div className="max-h-[75vh] overflow-y-auto p-6">
-          {description && (
-            <p className="mb-4 font-sans text-xs text-[#19151C]/60">{description}</p>
-          )}
-
+        {/* Content Body */}
+        <div className="max-h-[70vh] overflow-y-auto p-6 sm:p-8">
           {error && (
-            <div className="mb-5 flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 p-4 text-xs text-red-800">
-              <AlertCircle size={18} className="shrink-0 text-red-600" />
-              <div>
-                <p className="font-semibold">Notice</p>
-                <p className="mt-0.5 leading-relaxed">{error}</p>
-              </div>
+            <div className="mb-5 rounded-xl border border-red-200 bg-red-50 p-3.5 font-sans text-xs text-red-800">
+              {error}
             </div>
           )}
 
-          {/* File Dropzone */}
+          {/* Dropzone */}
           {!optResult && !optimizing && (
             <div
               onDragEnter={onDrag}
@@ -205,21 +210,31 @@ export default function ImageUploadModal({
               onDragOver={onDrag}
               onDrop={onDrop}
               onClick={() => fileInputRef.current?.click()}
-              className={`flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed p-10 text-center transition-all ${
+              className={`group flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed p-10 text-center transition-all ${
                 dragActive
                   ? "border-[#6C0798] bg-[#6C0798]/5"
-                  : "border-[#19151C]/15 hover:border-[#6C0798]/40 hover:bg-[#FAF8F9]"
+                  : "border-[#19151C]/15 bg-[#FAF8F9] hover:border-[#6C0798]/50 hover:bg-[#6C0798]/[0.02]"
               }`}
             >
-              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#6C0798]/10 text-[#6C0798]">
-                <UploadCloud size={28} />
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#6C0798]/10 text-[#6C0798] transition-transform group-hover:scale-105">
+                <UploadCloud size={24} />
               </div>
-              <p className="mt-4 font-sans text-sm font-medium text-[#19151C]">
-                Drag & drop, <span className="text-[#6C0798] underline">browse</span>, or paste (<kbd className="rounded bg-[#19151C]/5 px-1.5 py-0.5 font-mono text-[11px] text-[#19151C]/70">Ctrl+V</kbd>)
+
+              <p className="mt-4 font-sans text-sm font-semibold text-[#19151C]">
+                Choose a photo or drag & drop here
               </p>
-              <p className="mt-1 font-sans text-xs text-[#19151C]/45">
-                Recommended size: {recommendedDimensions} · JPG, PNG, WebP up to 25MB
+
+              <p className="mt-1 font-sans text-xs text-[#19151C]/50">
+                Supports JPG, PNG, or WebP · Paste with Ctrl+V
               </p>
+
+              <button
+                type="button"
+                className="mt-4 rounded-full border border-[#19151C]/15 bg-white px-4 py-1.5 font-sans text-xs font-medium text-[#19151C] transition-colors group-hover:border-[#6C0798] group-hover:text-[#6C0798]"
+              >
+                Browse files
+              </button>
+
               <input
                 ref={fileInputRef}
                 type="file"
@@ -232,91 +247,88 @@ export default function ImageUploadModal({
             </div>
           )}
 
-          {/* Optimizing state */}
+          {/* Optimizing State */}
           {optimizing && (
             <div className="flex flex-col items-center justify-center py-12 text-center">
-              <Loader2 size={36} className="animate-spin text-[#6C0798]" />
-              <p className="mt-4 font-sans text-sm font-medium text-[#19151C]">
-                Optimizing image in browser...
+              <Loader2 size={28} className="animate-spin text-[#6C0798]" />
+              <p className="mt-4 font-serif text-lg text-[#19151C]">
+                Preparing photo...
               </p>
               <p className="mt-1 font-sans text-xs text-[#19151C]/50">
-                Scaling dimensions & converting to high-efficiency WebP
+                Resizing and optimizing for fast browser loading
               </p>
             </div>
           )}
 
-          {/* Optimized Result & Preview */}
+          {/* Preview & Info */}
           {optResult && (
-            <div className="space-y-6">
-              {/* Optimization Stats Card */}
-              <div className="flex items-center justify-between rounded-xl border border-emerald-200 bg-emerald-50/70 p-4">
-                <div className="flex items-center gap-3">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-600 text-white">
-                    <Sparkles size={18} />
-                  </div>
+            <div className="space-y-5">
+              {/* Image Preview Container */}
+              <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-[#19151C]/10 bg-[#FAF8F9]">
+                <img
+                  src={optResult.previewUrl}
+                  alt="Preview"
+                  className="h-full w-full object-contain"
+                />
+              </div>
+
+              {/* Optimization summary */}
+              <div className="flex items-center justify-between rounded-xl bg-[#FAF8F9] px-4 py-3 text-xs">
+                <div className="flex items-center gap-4">
                   <div>
-                    <span className="font-sans text-[11px] font-bold uppercase tracking-wider text-emerald-800">
-                      Browser Optimized
+                    <span className="text-[#19151C]/50">Original:</span>{" "}
+                    <span className="font-semibold text-[#19151C]">
+                      {formatBytes(optResult.originalSize)}
                     </span>
-                    <p className="font-sans text-xs text-emerald-900">
-                      {formatBytes(optResult.originalSize)} →{" "}
-                      <span className="font-bold">{formatBytes(optResult.optimizedSize)}</span>{" "}
-                      ({optResult.reductionPercentage}% smaller in {optResult.processingTimeMs}ms)
-                    </p>
                   </div>
+                  <span className="text-[#19151C]/20">→</span>
+                  <div>
+                    <span className="text-[#19151C]/50">Ready to upload:</span>{" "}
+                    <span className="font-semibold text-[#6C0798]">
+                      {formatBytes(optResult.optimizedSize)}
+                    </span>
+                  </div>
+                  <span className="rounded-full bg-emerald-50 px-2 py-0.5 font-medium text-emerald-700">
+                    {optResult.reductionPercentage}% smaller
+                  </span>
                 </div>
+
                 <button
                   type="button"
                   onClick={() => {
                     setOptResult(null);
                     if (fileInputRef.current) fileInputRef.current.value = "";
                   }}
-                  className="font-sans text-xs font-medium text-emerald-800 underline hover:text-emerald-950"
+                  className="font-sans text-xs text-[#19151C]/50 underline hover:text-[#19151C]"
                 >
-                  Change file
+                  Choose another
                 </button>
               </div>
 
-              {/* Preview Image */}
-              <div className="overflow-hidden rounded-xl border border-[#19151C]/10 bg-[#19151C]">
-                <div className="relative flex aspect-video w-full items-center justify-center overflow-hidden">
-                  <img
-                    src={optResult.previewUrl}
-                    alt="Optimized preview"
-                    className="max-h-full max-w-full object-contain"
-                  />
-                  <div className="absolute bottom-2 right-2 rounded-md bg-black/60 px-2 py-1 font-mono text-[10px] text-white backdrop-blur-sm">
-                    {optResult.optimizedDimensions.width} × {optResult.optimizedDimensions.height}px
-                  </div>
-                </div>
-              </div>
-
-              {/* Form details */}
-              <div className="space-y-3">
-                <div>
-                  <label className="block font-sans text-xs font-semibold text-[#19151C]">
-                    Alt Text (Accessibility & SEO)
-                  </label>
-                  <input
-                    type="text"
-                    value={altText}
-                    onChange={(e) => setAltText(e.target.value)}
-                    placeholder="Describe this photo for screen readers..."
-                    className="mt-1 h-10 w-full rounded-lg border border-[#19151C]/15 bg-[#FAF8F9] px-3 font-sans text-xs text-[#19151C] outline-none focus:border-[#6C0798] focus:bg-white"
-                  />
-                </div>
+              {/* Alt Text */}
+              <div>
+                <label className="block font-sans text-xs font-semibold text-[#19151C]">
+                  Photo description (alt text)
+                </label>
+                <input
+                  type="text"
+                  value={altText}
+                  onChange={(e) => setAltText(e.target.value)}
+                  placeholder="e.g. Students in modern science lab"
+                  className="mt-1.5 h-10 w-full rounded-xl border border-[#19151C]/15 bg-[#FAF8F9] px-3.5 font-sans text-xs text-[#19151C] outline-none transition-colors focus:border-[#6C0798] focus:bg-white focus:ring-1 focus:ring-[#6C0798]"
+                />
               </div>
             </div>
           )}
         </div>
 
-        {/* Footer actions */}
-        <div className="flex items-center justify-between border-t border-[#19151C]/10 bg-[#FAF8F9] px-6 py-4">
+        {/* Modal Footer */}
+        <div className="flex items-center justify-between border-t border-[#19151C]/10 bg-[#FAF8F9] px-6 py-4 sm:px-8">
           <button
             type="button"
             onClick={onClose}
             disabled={uploading}
-            className="rounded-full border border-[#19151C]/15 px-5 py-2 font-sans text-xs font-medium text-[#19151C] hover:bg-white disabled:opacity-50"
+            className="rounded-full border border-[#19151C]/15 bg-white px-4 py-2 font-sans text-xs font-medium text-[#19151C]/70 transition-colors hover:border-[#19151C]/30 hover:text-[#19151C] disabled:opacity-40"
           >
             Cancel
           </button>
@@ -326,16 +338,16 @@ export default function ImageUploadModal({
               type="button"
               onClick={handleUpload}
               disabled={uploading}
-              className="inline-flex items-center gap-2 rounded-full bg-[#6C0798] px-6 py-2.5 font-sans text-xs font-semibold text-white transition-all hover:bg-[#4B075F] disabled:opacity-50"
+              className="inline-flex items-center gap-2 rounded-full bg-[#6C0798] px-5 py-2 font-sans text-xs font-medium text-white shadow-sm transition-colors hover:bg-[#4B075F] disabled:opacity-50"
             >
               {uploading ? (
                 <>
-                  <Loader2 size={16} className="animate-spin" />
-                  Uploading to Cloudinary...
+                  <Loader2 size={14} className="animate-spin" />
+                  <span>Uploading...</span>
                 </>
               ) : (
                 <>
-                  Save & Update Image
+                  <span>Save photo</span>
                   <ArrowRight size={14} />
                 </>
               )}
