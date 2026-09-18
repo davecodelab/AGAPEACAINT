@@ -18,12 +18,7 @@ export default function AdmissionsCTA() {
           purpose.
         </p>
         <div className="mt-9 flex flex-wrap items-center justify-center gap-4">
-          <Link
-            href="/admissions#book-a-visit"
-            className="rounded-full bg-white px-6 py-3.5 font-sans text-sm font-medium text-[#6C0798] transition-colors hover:bg-white/90"
-          >
-            Book a Visit
-          </Link>
+         
           <Link
             href="/admissions#how-to-apply"
             className="rounded-full bg-[#E12F41] px-6 py-3.5 font-sans text-sm font-medium text-white transition-colors hover:bg-[#c72638]"

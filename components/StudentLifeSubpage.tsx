@@ -76,11 +76,13 @@ export default function StudentLifeSubpage({
           transition={{ duration: 1.6, ease: [0.22, 1, 0.36, 1] }}
           className="absolute inset-[-5%]"
         >
-          <ParallaxImage
+          <Image
             src={data.heroImage}
             alt={data.heroAlt}
             className="h-full w-full"
-            intensity={10}
+            fill
+            quality={90}
+            priority
           />
         </motion.div>
 
