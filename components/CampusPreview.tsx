@@ -12,6 +12,7 @@ const SPACES = [
   { name: "Sport", tint: "#E12F41" },
   { name: "Creative Spaces", tint: "#8B176F" },
   { name: "Chapel", tint: "#4B075F" },
+  
 ];
 
 export default function CampusPreview() {

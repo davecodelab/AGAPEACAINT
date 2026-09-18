@@ -13,6 +13,7 @@ import { X, ChevronLeft, ChevronRight } from "lucide-react";
 type GalleryCategory =
   | "Classrooms"
   | "Science"
+  | "Graduation"
   | "Library"
   | "Sport"
   | "Creative Spaces"
@@ -32,6 +33,7 @@ const CATEGORIES: GalleryCategory[] = [
   "Classrooms",
   "Science",
   "Library",
+  "Graduation",
   "Sport",
   "Creative Spaces",
   "Chapel",
@@ -65,6 +67,7 @@ const CATEGORY_TINT: Record<GalleryCategory, string> = {
   Chapel: "#4B075F",
   Outdoor: "#6C0798",
   "Student Life": "#E12F41",
+  Graduation: "#8B176F",
 };
 
 function PatternPlaceholder({ image }: { image: GalleryImage }) {

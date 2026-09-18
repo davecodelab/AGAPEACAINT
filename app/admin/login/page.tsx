@@ -43,7 +43,7 @@ export default function AdminLoginPage() {
   return (
     <div className="flex min-h-screen flex-col justify-between bg-[#FAF8F9] px-6 py-8 sm:px-10">
       {/* Top Bar */}
-      <div className="mx-auto flex w-full max-w-5xl items-center justify-between">
+      {/* <div className="mx-auto flex w-full max-w-5xl items-center justify-between">
         <Link href="/" className="flex items-center gap-3">
           <Image
             src="/school_logo.png"
@@ -68,7 +68,7 @@ export default function AdminLoginPage() {
         >
           ← Back to website
         </Link>
-      </div>
+      </div> */}
 
       {/* Centered Login Card */}
       <div className="mx-auto my-auto w-full max-w-md">
