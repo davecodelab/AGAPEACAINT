@@ -1,3 +1,5 @@
+"use client";
+
 export { FadeUp } from "./FadeUp";
 export { FadeIn } from "./FadeIn";
 export { Stagger, StaggerItem } from "./Stagger";
