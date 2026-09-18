@@ -5,8 +5,6 @@ import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import SectionHeading from "./SectionHeading";
 import Image from "next/image";
-import { useMediaSlot } from "@/lib/use-media-slots";
-import { isCloudinaryUrl } from "@/lib/cloudinary";
 
 const PILLARS = [
   { title: "Academic Excellence", body: "A rigorous, well-rounded curriculum that stretches every learner." },
@@ -18,7 +16,6 @@ const PILLARS = [
 
 export default function IntroStory() {
   const prefersReducedMotion = useReducedMotion();
-  const coverSlot = useMediaSlot("home_intro_cover");
 
   return (
     <section id="our-story" className="px-6 py-20 sm:py-28 lg:px-10">
@@ -30,17 +27,16 @@ export default function IntroStory() {
           transition={{ duration: 0.6 }}
           className="aspect-[4/5] w-full overflow-hidden rounded-sm bg-gradient-to-br from-[#6C0798]/15 to-[#19151C]/10 lg:order-2"
         >
-          {/* Editorial photograph — teacher and students in conversation */}
-          <Image
-            src={coverSlot.currentUrl || "/cover.jpg"}
-            alt={coverSlot.altText || "Teacher speaking with Agape Academy students"}
-            width={800}
-            height={1000}
-            priority
-            quality={90}
-            unoptimized={isCloudinaryUrl(coverSlot.currentUrl)}
-            className="h-full w-full object-cover"
-          />
+          {/* Editorial photograph placeholder — a teacher and students in conversation */}
+    <Image
+    src="/cover.jpg"
+    alt="Teacher speaking with Agape Academy students"
+    width={800}
+    height={1000}
+    priority
+    quality={90} 
+    className="h-full w-full object-cover"
+  />
         </motion.div>
 
         <div className="lg:order-1">

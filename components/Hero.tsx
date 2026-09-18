@@ -3,44 +3,43 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
-import { ArrowRight, Play } from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import { useMediaSlot } from "@/lib/use-media-slots";
+import { isCloudinaryUrl, isCloudinaryVideoUrl } from "@/lib/cloudinary";
 
 export default function Hero() {
   const prefersReducedMotion = useReducedMotion();
-
+  const heroSlot = useMediaSlot("home_hero");
+  const isVideo = isCloudinaryVideoUrl(heroSlot.currentUrl);
+  const hasCustomMedia = Boolean(heroSlot.currentUrl && isCloudinaryUrl(heroSlot.currentUrl));
 
   return (
-    <section className="relative flex h-[92svh] min-h-[620px] w-full items-end overflow-hidden bg-[#19151C]">
-      {/* Background video */}
-      <div className="absolute inset-0">
+    <section className="relative flex h-[92vh] min-h-[620px] w-full items-end overflow-hidden bg-[#19151C]">
+      {/* Background Video / Photo (from Media CMS when uploaded to Cloudinary) */}
+      {hasCustomMedia && isVideo && (
         <video
-          className="h-full w-full object-cover object-center"
           autoPlay
-          muted
           loop
+          muted
           playsInline
-          preload="metadata"
-          poster="/classroom-poster.jpg"
-          aria-hidden="true"
-        >
-          <source
-            src="/videos/students-classroom.mp4"
-            type="video/mp4"
-          />
-        </video>
-      </div>
+          className="absolute inset-0 h-full w-full object-cover opacity-50"
+          src={heroSlot.currentUrl}
+        />
+      )}
+      {hasCustomMedia && !isVideo && (
+        <Image
+          src={heroSlot.currentUrl}
+          alt={heroSlot.altText || "Agape Academy campus and students"}
+          fill
+          priority
+          unoptimized
+          className="object-cover object-center opacity-50"
+        />
+      )}
 
-      {/* Dark cinematic overlay */}
-      <div className="absolute inset-0 bg-[#19151C]/45" />
-
-      {/* Purple brand overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#4B075F]/55 via-[#19151C]/20 to-[#6C0798]/20" />
-
-      {/* Bottom readability gradient */}
-      <div className="absolute inset-0 bg-gradient-to-t from-[#19151C] via-[#19151C]/65 to-transparent" />
-
-      {/* Subtle side gradient */}
-      <div className="absolute inset-0 bg-gradient-to-r from-[#19151C]/70 via-transparent to-transparent" />
+      {/* Signature brand gradients (always preserves original brand colors and contrast) */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#4B075F] via-[#19151C] to-[#6C0798]/40" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#19151C] via-[#19151C]/20 to-transparent" />
 
       {/* Content */}
       <div className="relative z-10 mx-auto w-full max-w-7xl px-6 pb-16 sm:pb-20 lg:px-10 lg:pb-24">

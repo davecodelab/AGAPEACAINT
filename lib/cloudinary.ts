@@ -39,6 +39,7 @@ export async function uploadToCloudinary(
     slotId?: string;
     publicId?: string;
     tags?: string[];
+    resourceType?: "image" | "video" | "auto";
   } = {}
 ): Promise<CloudinaryUploadResponse> {
   const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
@@ -50,7 +51,9 @@ export async function uploadToCloudinary(
     );
   }
 
-  const endpoint = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
+  const isVideo = file.type.startsWith("video/") || /\.(mp4|webm|mov)$/i.test(file.name);
+  const resourceType = options.resourceType || (isVideo ? "video" : "image");
+  const endpoint = `https://api.cloudinary.com/v1_1/${cloudName}/${resourceType}/upload`;
   const formData = new FormData();
   formData.append("file", file);
   formData.append("upload_preset", uploadPreset);
@@ -68,6 +71,7 @@ export async function uploadToCloudinary(
   const allTags = ["aai-web", ...(options.tags || [])];
   if (options.section) allTags.push(`section:${options.section}`);
   if (options.slotId) allTags.push(`slot:${options.slotId}`);
+  if (isVideo) allTags.push("type:video");
   formData.append("tags", allTags.join(","));
 
   const response = await fetch(endpoint, {
@@ -95,6 +99,17 @@ export function isCloudinaryUrl(url?: string): boolean {
 }
 
 /**
+ * Check whether a URL points to a video file
+ */
+export function isCloudinaryVideoUrl(url?: string): boolean {
+  if (!url) return false;
+  return (
+    url.includes("/video/upload/") ||
+    /\.(mp4|webm|mov|m4v|ogv)$/i.test(url.split("?")[0])
+  );
+}
+
+/**
  * Injects automatic format & quality transformations into Cloudinary URLs.
  * Automatically serves AVIF/WebP based on visitor browser and tunes compression.
  */
@@ -118,4 +133,5 @@ export function getOptimizedCloudinaryUrl(
   const transformString = transformations.join(",");
   return url.replace("/upload/", `/upload/${transformString}/`);
 }
+
 

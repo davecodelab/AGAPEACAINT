@@ -1,10 +1,7 @@
 "use client";
 
-import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import SectionHeading from "./SectionHeading";
-import { useMediaSlot } from "@/lib/use-media-slots";
-import { isCloudinaryUrl } from "@/lib/cloudinary";
 
 const AREAS = [
   "Pastoral care", "Student support", "Teacher relationships",
@@ -13,7 +10,6 @@ const AREAS = [
 
 export default function Wellbeing() {
   const prefersReducedMotion = useReducedMotion();
-  const wellbeingSlot = useMediaSlot("home_wellbeing");
 
   return (
     <section className="px-6 py-20 sm:py-28 lg:px-10">
@@ -24,18 +20,8 @@ export default function Wellbeing() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: 0.6 }}
-            className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-gradient-to-br from-[#E12F41]/10 to-[#6C0798]/10 shadow-lg"
-          >
-            {wellbeingSlot.currentUrl && (
-              <Image
-                src={wellbeingSlot.currentUrl}
-                alt={wellbeingSlot.altText || "Students connecting on campus"}
-                fill
-                unoptimized={isCloudinaryUrl(wellbeingSlot.currentUrl)}
-                className="object-cover"
-              />
-            )}
-          </motion.div>
+            className="aspect-[4/3] w-full rounded-sm bg-gradient-to-br from-[#E12F41]/10 to-[#6C0798]/10"
+          />
           <div>
             <SectionHeading
               eyebrow="Wellbeing"

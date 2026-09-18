@@ -1,16 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import SectionHeading from "./SectionHeading";
-import { useMediaSlot } from "@/lib/use-media-slots";
-import { isCloudinaryUrl } from "@/lib/cloudinary";
 
 export default function PrincipalMessage() {
   const prefersReducedMotion = useReducedMotion();
-  const principalSlot = useMediaSlot("home_principal");
 
   return (
     <section className="bg-white px-6 py-20 sm:py-28 lg:px-10">
@@ -20,18 +16,8 @@ export default function PrincipalMessage() {
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.6 }}
-          className="relative aspect-[3/4] w-full max-w-sm overflow-hidden rounded-2xl bg-gradient-to-br from-[#4B075F]/15 to-[#6C0798]/10 shadow-lg"
-        >
-          {principalSlot.currentUrl && (
-            <Image
-              src={principalSlot.currentUrl}
-              alt={principalSlot.altText || "Principal, Agape Academy International"}
-              fill
-              unoptimized={isCloudinaryUrl(principalSlot.currentUrl)}
-              className="object-cover"
-            />
-          )}
-        </motion.div>
+          className="aspect-[3/4] w-full max-w-sm rounded-sm bg-gradient-to-br from-[#4B075F]/15 to-[#6C0798]/10"
+        />
         <div>
           <SectionHeading
             eyebrow="From our leadership"
