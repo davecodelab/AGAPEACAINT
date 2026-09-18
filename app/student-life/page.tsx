@@ -50,6 +50,7 @@ const activities = [
     icon: Sparkles,
     image:
       "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1400&q=90",
+      href: "/student-life/clubs",
   },
   {
     number: "02",
@@ -59,6 +60,7 @@ const activities = [
     icon: Trophy,
     image:
       "/games_3.jpg",
+      href: "/student-life/sports",
   },
   {
     number: "03",
@@ -68,7 +70,8 @@ const activities = [
     icon: Palette,
     image:
       "https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?auto=format&fit=crop&w=1400&q=90",
-  },
+      href: "/student-life/arts",
+    },
   {
     number: "04",
     title: "Leadership",
@@ -77,7 +80,8 @@ const activities = [
     icon: Crown,
     image:
       "https://images.unsplash.com/photo-1529390079861-591de354faf5?auto=format&fit=crop&w=1400&q=90",
-  },
+  href: "/student-life/leadership",
+    },
   {
     number: "05",
     title: "Trips & Experiences",
@@ -86,6 +90,7 @@ const activities = [
     icon: Compass,
     image:
       "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1400&q=90",
+      href: "/student-life/trips",
   },
   {
     number: "06",
@@ -95,16 +100,18 @@ const activities = [
     icon: Users,
     image:
       "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=1400&q=90",
+      href: "/student-life/student-union",
   },
 ];
 
 const quickLinks = [
-  { label: "Clubs", href: "#clubs" },
-  { label: "Sports", href: "#sports" },
-  { label: "Arts", href: "#arts" },
-  { label: "Leadership", href: "#leadership" },
-  { label: "Trips", href: "#trips" },
-  { label: "Student Union", href: "#union" },
+  { label: "Clubs", href: "/student-life/clubs" },
+  { label: "Sports", href: "/student-life/sports" },
+  { label: "Arts", href: "/student-life/arts" },
+  { label: "Leadership", href: "/student-life/leadership" },
+  { label: "Trips", href: "/student-life/trips" },
+  { label: "Student Union", href: "/student-life/student-union" },
+  { label: "Alumni", href: "/alumni" },
 ];
 
 export default function StudentLifePage() {
@@ -276,13 +283,13 @@ export default function StudentLifePage() {
             </span>
 
             {quickLinks.map((item) => (
-              <a
+              <Link
                 key={item.href}
                 href={item.href}
                 className="font-sans text-xs font-medium text-[#19151C]/55 transition hover:text-[#6C0798]"
               >
                 {item.label}
-              </a>
+              </Link>
             ))}
           </div>
         </div>
@@ -567,7 +574,7 @@ export default function StudentLifePage() {
 
                       <div className="mt-9">
                         <Link
-                          href="/contact"
+                          href={activity.href}
                           className="group/link inline-flex items-center gap-3 font-sans text-sm font-semibold"
                         >
                           Discover more

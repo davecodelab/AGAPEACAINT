@@ -3,7 +3,7 @@ import { DM_Serif_Display, Manrope } from "next/font/google";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Preloader from "@/components/Preloader";
-import MobileApplyBar from "@/components/MobileApplyBar";
+// import MobileApplyBar from "@/components/MobileApplyBar";
 
 import "./globals.css";
 
@@ -126,7 +126,7 @@ export default function RootLayout({
         <Navbar />
         {children}
         <Footer />
-        <MobileApplyBar />
+        {/* <MobileApplyBar /> */}
       </body>
     </html>
   );
