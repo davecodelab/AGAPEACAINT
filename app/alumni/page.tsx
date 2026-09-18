@@ -1,41 +1,56 @@
-
 import Link from "next/link";
-import { ArrowRight, GraduationCap, MapPin, Quote } from "lucide-react";
-import { motion } from "framer-motion";
-
 import {
-  FadeIn,
-  FadeUp,
-  ParallaxImage,
-  Reveal,
-  Stagger,
-  StaggerItem,
-} from "@/components/Animations";
+  ArrowRight,
+  GraduationCap,
+  Quote,
+  Globe2,
+  Users,
+  Heart,
+  Sparkles,
+} from "lucide-react";
 
 const alumniStories = [
   {
-    year: "Alumni story",
+    number: "01",
+    eyebrow: "The journey",
     title: "From Agape to the world.",
     text:
       "Every graduating class begins a new chapter. Alumni carry forward the academic foundation, friendships, experiences and values developed during their years at Agape.",
     image:
-      "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1600&q=90",
+      "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1800&q=85",
   },
   {
-    year: "The journey",
-    title: "Different destinations. Shared roots.",
+    number: "02",
+    eyebrow: "Shared roots",
+    title: "Different destinations. One community.",
     text:
       "University, entrepreneurship, professional life, service and new opportunities can take alumni in many different directions while the Agape experience remains part of their story.",
     image:
-      "https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?auto=format&fit=crop&w=1600&q=90",
+      "https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?auto=format&fit=crop&w=1800&q=85",
   },
 ];
 
 const values = [
-  "Academic foundation",
-  "Christian character",
-  "Confidence to explore",
-  "Commitment to service",
+  {
+    number: "01",
+    title: "Academic foundation",
+    icon: GraduationCap,
+  },
+  {
+    number: "02",
+    title: "Christian character",
+    icon: Heart,
+  },
+  {
+    number: "03",
+    title: "Confidence to explore",
+    icon: Globe2,
+  },
+  {
+    number: "04",
+    title: "Commitment to service",
+    icon: Users,
+  },
 ];
 
 export default function AlumniPage() {
@@ -44,66 +59,73 @@ export default function AlumniPage() {
       {/* =========================================================
           HERO
       ========================================================= */}
-      <section className="relative min-h-[82svh] overflow-hidden bg-[#19151C] text-white sm:min-h-[88vh] lg:min-h-[92vh]">
-        <motion.div
-          initial={{ scale: 1.1 }}
-          animate={{ scale: 1 }}
-          transition={{ duration: 1.5 }}
-          className="absolute inset-[-5%]"
-        >
-          <ParallaxImage
+      <section className="relative min-h-[78svh] overflow-hidden bg-[#19151C] text-white sm:min-h-[86vh] lg:min-h-[92vh]">
+        {/* Background image */}
+        <div className="absolute inset-0">
+          <img
             src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=2400&q=90"
             alt="Graduating students"
-            className="h-full w-full"
-            intensity={8}
+            className="h-full w-full object-cover object-center"
           />
-        </motion.div>
+        </div>
 
-        <div className="absolute inset-0 bg-[#19151C]/60" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#19151C]/95 via-[#19151C]/50 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#19151C] via-transparent to-transparent" />
+        {/* Cinematic overlays */}
+        <div className="absolute inset-0 bg-[#19151C]/65" />
 
-        <motion.div
-          animate={{
-            x: [0, 60, -20, 0],
-            y: [0, -30, 30, 0],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          className="pointer-events-none absolute -right-40 top-10 h-[30rem] w-[30rem] rounded-full bg-[#6C0798]/25 blur-[120px]"
-        />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#19151C] via-[#19151C]/65 to-[#19151C]/20" />
 
-        <div className="relative z-10 mx-auto flex min-h-[82svh] max-w-7xl items-end px-5 pb-14 sm:min-h-[88vh] sm:px-8 sm:pb-20 lg:min-h-[92vh] lg:px-10">
+        <div className="absolute inset-0 bg-gradient-to-t from-[#19151C] via-[#19151C]/20 to-transparent" />
+
+        {/* Purple atmospheric glow */}
+        <div className="pointer-events-none absolute -right-48 top-0 h-[32rem] w-[32rem] rounded-full bg-[#6C0798]/30 blur-[120px]" />
+
+        {/* Hero content */}
+        <div className="relative z-10 mx-auto flex min-h-[78svh] max-w-7xl items-end px-5 pb-10 sm:min-h-[86vh] sm:px-8 sm:pb-16 lg:min-h-[92vh] lg:px-10 lg:pb-20">
           <div className="max-w-5xl">
-            <FadeUp>
-              <div className="mb-6 flex items-center gap-3">
-                <span className="h-px w-10 bg-[#E12F41]" />
-                <span className="font-sans text-xs font-bold uppercase tracking-[0.25em] text-white/60">
-                  Alumni
-                </span>
-              </div>
-            </FadeUp>
+            <div className="mb-5 flex items-center gap-3 sm:mb-7">
 
-            <FadeUp>
-              <h1 className="font-serif text-[4rem] leading-[0.84] tracking-[-0.055em] sm:text-7xl md:text-8xl lg:text-[9rem]">
-                Once Agape.
-                <span className="block text-white/35">
-                  Always connected.
-                </span>
-              </h1>
-            </FadeUp>
+            </div>
 
-            <FadeUp>
-              <p className="mt-8 max-w-2xl font-sans text-base leading-7 text-white/65 sm:text-lg sm:leading-8">
-                Graduation is not the end of the story. It is the beginning of
-                a new chapter — and the beginning of an alumni community that
-                continues beyond the school gates.
-              </p>
-            </FadeUp>
+            <h1 className="font-serif text-[2.7rem] leading-[0.9] tracking-[-0.045em] sm:text-5xl md:text-6xl lg:text-[5rem]">
+              Once Agape.
+              <span className="block text-white/35">
+                Always connected.
+              </span>
+            </h1>
+
+            <p className="mt-6 max-w-xl font-sans text-sm leading-6 text-white/65 sm:mt-7 sm:text-base sm:leading-7 lg:text-lg lg:leading-8">
+              Graduation is not the end of the story. It is the beginning of
+              a new chapter — and the beginning of an alumni community that
+              continues beyond the school gates.
+            </p>
+
+            <div className="mt-7 flex flex-wrap items-center gap-4">
+              <Link
+                href="/contact"
+                className="group inline-flex items-center gap-3 rounded-full bg-white px-5 py-3 font-sans text-xs font-semibold text-[#19151C] transition duration-300 hover:bg-[#E12F41] hover:text-white sm:px-6 sm:py-3.5 sm:text-sm"
+              >
+                Stay connected
+
+                <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+              </Link>
+            </div>
           </div>
+        </div>
+
+        {/* Vertical editorial label */}
+        <div className="absolute right-5 top-1/2 hidden -translate-y-1/2 rotate-90 sm:block">
+          <span className="font-sans text-[9px] font-bold uppercase tracking-[0.35em] text-white/30">
+            Agape Alumni Journal
+          </span>
+        </div>
+
+        {/* Bottom indicator */}
+        <div className="absolute bottom-7 right-6 hidden items-center gap-3 sm:flex lg:right-10">
+          <span className="font-sans text-[9px] font-bold uppercase tracking-[0.3em] text-white/30">
+            Scroll to explore
+          </span>
+
+          <span className="h-px w-12 bg-white/20" />
         </div>
       </section>
 
@@ -111,176 +133,220 @@ export default function AlumniPage() {
           INTRO
       ========================================================= */}
       <section className="px-5 py-20 sm:px-8 sm:py-28 lg:px-10 lg:py-36">
-        <div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-[0.7fr_1.3fr] lg:gap-24">
-          <FadeUp>
-            <div>
-              <span className="font-sans text-xs font-bold uppercase tracking-[0.2em] text-[#E12F41]">
-                Our alumni community
+        <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.7fr_1.3fr] lg:gap-24">
+          <div>
+            <span className="font-sans text-[10px] font-bold uppercase tracking-[0.25em] text-[#E12F41] sm:text-xs">
+              Our alumni community
+            </span>
+
+            <h2 className="mt-5 max-w-xl font-serif text-5xl leading-[0.9] tracking-[-0.035em] sm:text-6xl lg:text-7xl">
+              Different paths.
+              <span className="block text-[#6C0798]">
+                Shared beginnings.
               </span>
+            </h2>
+          </div>
 
-              <h2 className="mt-5 font-serif text-5xl leading-[0.94] sm:text-6xl lg:text-7xl">
-                Different paths.
-                <span className="block text-[#6C0798]">
-                  Shared beginnings.
-                </span>
-              </h2>
-            </div>
-          </FadeUp>
-
-          <FadeUp>
+          <div className="lg:pt-12">
             <p className="max-w-3xl font-sans text-lg leading-8 text-[#19151C]/60 sm:text-xl sm:leading-9">
               An alumni community connects past students with one another and
               with the school that helped shape their early journey. It creates
               space for stories, relationships, mentorship, celebration and
               continued connection.
             </p>
-          </FadeUp>
+
+            <div className="mt-10 flex items-center gap-4">
+              <span className="h-px w-12 bg-[#6C0798]" />
+
+              <span className="font-sans text-xs font-bold uppercase tracking-[0.2em] text-[#19151C]/40">
+                Excellence in Christ
+              </span>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* =========================================================
-          STORIES
+          EDITORIAL STORIES
       ========================================================= */}
       <section className="bg-[#19151C] text-white">
         {alumniStories.map((story, index) => (
-          <div
-            key={story.title}
-            className="mx-auto grid max-w-[1500px] lg:grid-cols-2"
+          <article
+            key={story.number}
+            className="mx-auto grid max-w-[1600px] lg:grid-cols-2"
           >
-            <Reveal direction={index % 2 ? "right" : "left"}>
-              <div className="relative min-h-[430px] overflow-hidden sm:min-h-[600px] lg:min-h-[700px]">
-                <ParallaxImage
-                  src={story.image}
-                  alt={story.title}
-                  className="absolute inset-0 h-full w-full"
-                  intensity={10}
-                />
+            {/* Image */}
+            <div
+              className={`relative min-h-[420px] overflow-hidden sm:min-h-[600px] lg:min-h-[760px] ${
+                index % 2 === 1 ? "lg:order-2" : ""
+              }`}
+            >
+              <img
+                src={story.image}
+                alt={story.title}
+                className="absolute inset-0 h-full w-full object-cover transition duration-[1400ms] hover:scale-[1.04]"
+              />
 
-                <div className="absolute inset-0 bg-gradient-to-t from-[#19151C]/75 via-transparent to-transparent" />
-              </div>
-            </Reveal>
+              <div className="absolute inset-0 bg-gradient-to-t from-[#19151C]/80 via-transparent to-transparent" />
 
-            <div className="flex items-center px-6 py-16 sm:px-10 sm:py-24 lg:px-20">
-              <div className="max-w-xl">
-                <FadeUp>
-                  <span className="font-sans text-xs font-bold uppercase tracking-[0.2em] text-[#E12F41]">
-                    {story.year}
-                  </span>
-                </FadeUp>
-
-                <FadeUp>
-                  <h2 className="mt-5 font-serif text-5xl leading-[0.94] sm:text-6xl">
-                    {story.title}
-                  </h2>
-                </FadeUp>
-
-                <FadeUp>
-                  <p className="mt-7 font-sans text-base leading-8 text-white/55 sm:text-lg">
-                    {story.text}
-                  </p>
-                </FadeUp>
+              <div className="absolute left-6 top-6 sm:left-10 sm:top-10">
+                <span className="font-serif text-5xl text-white/30 sm:text-7xl">
+                  {story.number}
+                </span>
               </div>
             </div>
-          </div>
+
+            {/* Text */}
+            <div
+              className={`flex items-center px-6 py-16 sm:px-10 sm:py-24 lg:px-20 lg:py-32 ${
+                index % 2 === 1 ? "lg:order-1" : ""
+              }`}
+            >
+              <div className="max-w-xl">
+                <span className="font-sans text-[10px] font-bold uppercase tracking-[0.25em] text-[#E12F41] sm:text-xs">
+                  {story.eyebrow}
+                </span>
+
+                <h2 className="mt-5 font-serif text-5xl leading-[0.92] tracking-[-0.035em] sm:text-6xl lg:text-7xl">
+                  {story.title}
+                </h2>
+
+                <p className="mt-7 font-sans text-base leading-8 text-white/55 sm:text-lg">
+                  {story.text}
+                </p>
+
+                <div className="mt-10 flex items-center gap-4">
+                  <span className="h-px w-10 bg-[#6C0798]" />
+
+                  <span className="font-sans text-[10px] font-bold uppercase tracking-[0.2em] text-white/35">
+                    Agape Alumni
+                  </span>
+                </div>
+              </div>
+            </div>
+          </article>
         ))}
       </section>
 
       {/* =========================================================
-          WHAT REMAINS
+          LEGACY
       ========================================================= */}
-      <section className="px-5 py-20 sm:px-8 sm:py-28 lg:px-10 lg:py-36">
-        <div className="mx-auto max-w-7xl">
-          <FadeUp>
-            <div className="max-w-2xl">
-              <span className="font-sans text-xs font-bold uppercase tracking-[0.2em] text-[#6C0798]">
-                What remains
+      <section className="relative overflow-hidden px-5 py-20 sm:px-8 sm:py-28 lg:px-10 lg:py-36">
+        <div className="pointer-events-none absolute -left-40 top-20 h-[30rem] w-[30rem] rounded-full bg-[#6C0798]/10 blur-[120px]" />
+
+        <div className="relative mx-auto max-w-7xl">
+          <div className="max-w-3xl">
+            <span className="font-sans text-[10px] font-bold uppercase tracking-[0.25em] text-[#6C0798] sm:text-xs">
+              What remains
+            </span>
+
+            <h2 className="mt-5 font-serif text-5xl leading-[0.9] tracking-[-0.035em] sm:text-6xl lg:text-8xl">
+              More than a{" "}
+              <span className="text-[#E12F41]">
+                school record.
               </span>
+            </h2>
 
-              <h2 className="mt-5 font-serif text-5xl leading-[0.94] sm:text-6xl lg:text-7xl">
-                More than a
-                <span className="text-[#E12F41]"> school record.</span>
-              </h2>
-            </div>
-          </FadeUp>
+            <p className="mt-7 max-w-2xl font-sans text-base leading-7 text-[#19151C]/55 sm:text-lg sm:leading-8">
+              An Agape education is part of a longer journey. The relationships,
+              character, confidence and experiences developed during school can
+              continue to shape the paths students take after graduation.
+            </p>
+          </div>
 
-          <Stagger className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {values.map((value, index) => (
-              <StaggerItem key={value}>
-                <div className="rounded-2xl border border-[#19151C]/10 bg-white p-6 transition duration-300 hover:-translate-y-1 hover:shadow-xl">
-                  <span className="font-serif text-4xl text-[#6C0798]">
-                    0{index + 1}
-                  </span>
+          {/* Values */}
+          <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:mt-20 lg:grid-cols-4">
+            {values.map((value) => {
+              const Icon = value.icon;
 
-                  <h3 className="mt-8 font-sans text-sm font-bold">
-                    {value}
-                  </h3>
+              return (
+                <div
+                  key={value.number}
+                  className="group relative overflow-hidden rounded-2xl border border-[#19151C]/10 bg-white p-6 transition duration-500 hover:-translate-y-2 hover:shadow-2xl sm:p-7"
+                >
+                  <div className="absolute -right-10 -top-10 h-28 w-28 rounded-full bg-[#6C0798]/5 transition duration-500 group-hover:scale-150" />
+
+                  <div className="relative">
+                    <div className="flex items-start justify-between">
+                      <span className="font-serif text-4xl text-[#6C0798]/35">
+                        {value.number}
+                      </span>
+
+                      <Icon className="h-5 w-5 text-[#E12F41]" />
+                    </div>
+
+                    <h3 className="mt-10 font-sans text-sm font-bold leading-6">
+                      {value.title}
+                    </h3>
+                  </div>
                 </div>
-              </StaggerItem>
-            ))}
-          </Stagger>
+              );
+            })}
+          </div>
         </div>
       </section>
 
       {/* =========================================================
           QUOTE
       ========================================================= */}
-      <section className="bg-[#E12F41] px-5 py-24 text-white sm:px-8 sm:py-32 lg:px-10 lg:py-40">
-        <div className="mx-auto max-w-6xl text-center">
-          <Quote className="mx-auto h-9 w-9 text-white/40" />
+      <section className="relative overflow-hidden bg-[#E12F41] px-5 py-24 text-white sm:px-8 sm:py-32 lg:px-10 lg:py-40">
+        <div className="pointer-events-none absolute -right-40 -top-40 h-[30rem] w-[30rem] rounded-full bg-white/10 blur-[100px]" />
 
-          <FadeUp>
-            <blockquote className="mt-8 font-serif text-4xl leading-[0.94] sm:text-6xl lg:text-7xl">
-              “The years at school become part of the story you carry into the
-              world.”
-            </blockquote>
-          </FadeUp>
+        <div className="relative mx-auto max-w-6xl text-center">
+          <Quote className="mx-auto h-9 w-9 text-white/35" />
 
-          <FadeIn>
-            <div className="mx-auto mt-10 flex items-center justify-center gap-3">
-              <GraduationCap className="h-5 w-5" />
-              <span className="font-sans text-xs font-bold uppercase tracking-[0.2em] text-white/60">
-                Agape Academy International
-              </span>
-            </div>
-          </FadeIn>
+          <blockquote className="mt-8 font-serif text-4xl leading-[0.92] tracking-[-0.03em] sm:text-6xl lg:text-8xl">
+            “The years at school become part of the story you carry into the
+            world.”
+          </blockquote>
+
+          <div className="mx-auto mt-10 flex items-center justify-center gap-3">
+            <GraduationCap className="h-5 w-5" />
+
+            <span className="font-sans text-[10px] font-bold uppercase tracking-[0.25em] text-white/60 sm:text-xs">
+              Agape Academy International
+            </span>
+          </div>
         </div>
       </section>
 
       {/* =========================================================
-          ALUMNI CONNECTION CTA
+          COMMUNITY CTA
       ========================================================= */}
       <section className="px-5 py-5 sm:px-8 sm:py-8 lg:px-10">
         <div className="relative mx-auto max-w-7xl overflow-hidden rounded-[1.75rem] bg-[#19151C] px-6 py-16 text-white sm:rounded-[2rem] sm:px-10 sm:py-20 lg:px-16 lg:py-24">
+          {/* Decorative glows */}
           <div className="pointer-events-none absolute -right-40 -top-40 h-[30rem] w-[30rem] rounded-full bg-[#6C0798]/30 blur-[110px]" />
+
+          <div className="pointer-events-none absolute -bottom-40 -left-40 h-[20rem] w-[20rem] rounded-full bg-[#E12F41]/10 blur-[100px]" />
 
           <div className="relative grid gap-10 lg:grid-cols-[1fr_auto] lg:items-end">
             <div>
-              <FadeUp>
-                <span className="font-sans text-xs font-bold uppercase tracking-[0.2em] text-white/40">
+              <div className="flex items-center gap-3">
+                <Sparkles className="h-4 w-4 text-[#E12F41]" />
+
+                <span className="font-sans text-[10px] font-bold uppercase tracking-[0.25em] text-white/40 sm:text-xs">
                   Stay connected
                 </span>
-              </FadeUp>
+              </div>
 
-              <FadeUp>
-                <h2 className="mt-5 max-w-4xl font-serif text-5xl leading-[0.94] sm:text-6xl lg:text-7xl">
-                  Your Agape story
-                  <span className="text-white/35"> continues.</span>
-                </h2>
-              </FadeUp>
+              <h2 className="mt-5 max-w-4xl font-serif text-5xl leading-[0.9] tracking-[-0.035em] sm:text-6xl lg:text-8xl">
+                Your Agape story
+                <span className="text-white/30"> continues.</span>
+              </h2>
 
-              <FadeUp>
-                <p className="mt-6 max-w-xl font-sans text-base leading-7 text-white/50 sm:text-lg">
-                  We look forward to building an alumni community where past,
-                  present and future generations can remain connected.
-                </p>
-              </FadeUp>
+              <p className="mt-6 max-w-xl font-sans text-base leading-7 text-white/50 sm:text-lg">
+                We look forward to building an alumni community where past,
+                present and future generations can remain connected.
+              </p>
             </div>
 
             <Link
               href="/contact"
-              className="group inline-flex h-13 items-center justify-center gap-3 rounded-full bg-white px-7 py-4 font-sans text-sm font-semibold text-[#19151C] transition hover:bg-[#E12F41] hover:text-white"
+              className="group inline-flex h-[52px] items-center justify-center gap-3 rounded-full bg-white px-7 font-sans text-sm font-semibold text-[#19151C] transition duration-300 hover:bg-[#E12F41] hover:text-white"
             >
-              Stay connected
+              Get in touch
+
               <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
             </Link>
           </div>
