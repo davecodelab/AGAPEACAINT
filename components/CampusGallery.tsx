@@ -43,15 +43,15 @@ const IMAGES: GalleryImage[] = [
   { id: "g1", category: "Classrooms", title: "Middle School classroom", caption: "Students collaborating during a Grade 7 lesson." },
   { id: "g2", category: "Science", title: "Science laboratory", caption: "Hands-on experimentation in the senior science lab." },
   { id: "g3", category: "Chapel", title: "Morning chapel", caption: "The school community gathers for weekly chapel." },
-  { id: "g4", category: "Sport", title: "Sports field", caption: "Inter-house competition on the main field." },
+  { id: "g4", category: "Sport", title: "Sports field", caption: "Inter-house competition on the main field.", src: "/games_1.jpg" },
   { id: "g5", category: "Library", title: "Reading room", caption: "A quiet corner of the school library." },
   { id: "g6", category: "Creative Spaces", title: "Art studio", caption: "Student work on display in the art studio." },
-  { id: "g7", category: "Student Life", title: "Break time", caption: "Students between classes on the main courtyard." },
+  { id: "g7", category: "Student Life", title: "Break time", caption: "Students between classes on the main courtyard.", src: "/together.jpg" },
   { id: "g8", category: "Outdoor", title: "Campus grounds", caption: "The walkway connecting the primary and middle school blocks." },
   { id: "g9", category: "Classrooms", title: "Early Years room", caption: "A Kindergarten classroom set up for the day." },
-  { id: "g10", category: "Sport", title: "Basketball court", caption: "After-school basketball practice." },
+  { id: "g10", category: "Sport", title: "Athletics & Games", caption: "Students participating in track and field activities.", src: "/games_2.jpg" },
   { id: "g11", category: "Creative Spaces", title: "Music room", caption: "Rehearsal ahead of the term's music showcase." },
-  { id: "g12", category: "Student Life", title: "Student Union", caption: "Student Union members planning a community project." },
+  { id: "g12", category: "Student Life", title: "Sports Day Community", caption: "Celebrating teamwork and achievement across houses.", src: "/games_4.jpg" },
 ];
 
 // A muted per-category tint, kept mostly neutral so the 70/20/10 colour
@@ -97,11 +97,36 @@ function PatternPlaceholder({ image }: { image: GalleryImage }) {
 export default function CampusGallery() {
   const [active, setActive] = useState<GalleryCategory | "All">("All");
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [dynamicImages, setDynamicImages] = useState<GalleryImage[]>([]);
   const prefersReducedMotion = useReducedMotion();
 
+  useEffect(() => {
+    async function loadDynamic() {
+      try {
+        const res = await fetch("/api/admin/gallery");
+        const data = await res.json();
+        if (data.success && data.photos?.length) {
+          const mapped: GalleryImage[] = data.photos.map((p: any) => ({
+            id: p.id,
+            category: p.category,
+            title: p.title,
+            caption: p.caption,
+            src: p.cloudinary_url,
+          }));
+          setDynamicImages(mapped);
+        }
+      } catch (e) {
+        // Graceful fallback to static images
+      }
+    }
+    loadDynamic();
+  }, []);
+
+  const allImages = useMemo(() => [...dynamicImages, ...IMAGES], [dynamicImages]);
+
   const filtered = useMemo(
-    () => (active === "All" ? IMAGES : IMAGES.filter((img) => img.category === active)),
-    [active]
+    () => (active === "All" ? allImages : allImages.filter((img) => img.category === active)),
+    [active, allImages]
   );
 
   const openImage = filtered[openIndex ?? -1] ?? null;

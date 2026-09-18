@@ -1,0 +1,535 @@
+"use client";
+
+import React, { useState, useEffect } from "react";
+import Image from "next/image";
+import {
+  UploadCloud,
+  CheckCircle2,
+  AlertTriangle,
+  RefreshCw,
+  Plus,
+  Trash2,
+  Camera,
+} from "lucide-react";
+import ImageUploadModal from "@/components/admin/ImageUploadModal";
+import { MediaSlot, GalleryPhoto, DEFAULT_SLOTS } from "@/lib/media-slots";
+import { invalidateSlotsCache } from "@/lib/use-media-slots";
+
+export default function AdminDashboardPage() {
+  const [activeTab, setActiveTab] = useState<"slots" | "gallery">("slots");
+  const [selectedSection, setSelectedSection] = useState<string>("all");
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+
+  const [slots, setSlots] = useState<MediaSlot[]>(Object.values(DEFAULT_SLOTS));
+  const [galleryPhotos, setGalleryPhotos] = useState<GalleryPhoto[]>([]);
+  const [isSupabaseConnected, setIsSupabaseConnected] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  // Modal State
+  const [uploadModalOpen, setUploadModalOpen] = useState(false);
+  const [targetSlot, setTargetSlot] = useState<MediaSlot | null>(null);
+  const [isGalleryUpload, setIsGalleryUpload] = useState(false);
+  const [newGalleryCategory, setNewGalleryCategory] = useState<any>("Classrooms");
+
+  const [notification, setNotification] = useState<{
+    type: "success" | "error";
+    message: string;
+  } | null>(null);
+
+  const fetchSlotsAndGallery = async () => {
+    setLoading(true);
+    try {
+      const slotsRes = await fetch("/api/admin/slots");
+      const slotsData = await slotsRes.json();
+      if (slotsData.success && slotsData.slots) {
+        setSlots(slotsData.slots);
+        setIsSupabaseConnected(slotsData.isSupabaseConnected);
+      }
+
+      const galRes = await fetch("/api/admin/gallery");
+      const galData = await galRes.json();
+      if (galData.success && galData.photos) {
+        setGalleryPhotos(galData.photos);
+      }
+    } catch (e) {
+      console.error("Failed to load CMS data", e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchSlotsAndGallery();
+  }, []);
+
+  const triggerNotification = (type: "success" | "error", message: string) => {
+    setNotification({ type, message });
+    setTimeout(() => setNotification(null), 4000);
+  };
+
+  const handleSlotUploadSuccess = async (data: {
+    cloudinaryUrl: string;
+    cloudinaryPublicId: string;
+    altText: string;
+  }) => {
+    if (!targetSlot) return;
+
+    setSlots((prev) =>
+      prev.map((s) =>
+        s.id === targetSlot.id
+          ? {
+              ...s,
+              currentUrl: data.cloudinaryUrl,
+              altText: data.altText,
+              updatedAt: new Date().toISOString(),
+            }
+          : s
+      )
+    );
+
+    try {
+      const res = await fetch("/api/admin/slots", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: targetSlot.id,
+          cloudinary_url: data.cloudinaryUrl,
+          cloudinary_public_id: data.cloudinaryPublicId,
+          alt_text: data.altText,
+        }),
+      });
+
+      const resData = await res.json();
+      if (!res.ok || !resData.success) {
+        throw new Error(resData.error || "Failed to save update to database");
+      }
+
+      invalidateSlotsCache();
+      triggerNotification("success", `Updated "${targetSlot.label}" successfully.`);
+    } catch (err: any) {
+      triggerNotification("error", err.message || "Failed to update photo");
+    }
+  };
+
+  const handleGalleryUploadSuccess = async (data: {
+    cloudinaryUrl: string;
+    cloudinaryPublicId: string;
+    title?: string;
+    altText: string;
+  }) => {
+    try {
+      const res = await fetch("/api/admin/gallery", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          category: newGalleryCategory,
+          title: data.title || "Campus Photo",
+          caption: data.altText || "",
+          cloudinary_url: data.cloudinaryUrl,
+          cloudinary_public_id: data.cloudinaryPublicId,
+        }),
+      });
+
+      const resData = await res.json();
+      if (!res.ok || !resData.success) {
+        throw new Error(resData.error || "Failed to save photo to gallery");
+      }
+
+      setGalleryPhotos((prev) => [resData.photo, ...prev]);
+      triggerNotification(
+        "success",
+        `Added new photo to "${newGalleryCategory}".`
+      );
+    } catch (err: any) {
+      triggerNotification("error", err.message || "Failed to add photo");
+    }
+  };
+
+  const handleDeleteGalleryPhoto = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this photo from the gallery?"))
+      return;
+
+    try {
+      const res = await fetch(`/api/admin/gallery?id=${id}`, {
+        method: "DELETE",
+      });
+
+      const resData = await res.json();
+      if (!res.ok || !resData.success) {
+        throw new Error(resData.error || "Failed to delete photo");
+      }
+
+      setGalleryPhotos((prev) => prev.filter((p) => p.id !== id));
+      triggerNotification("success", "Photo removed from gallery.");
+    } catch (err: any) {
+      triggerNotification("error", err.message || "Failed to delete photo");
+    }
+  };
+
+  const filteredSlots =
+    selectedSection === "all"
+      ? slots
+      : slots.filter((s) => s.section === selectedSection);
+
+  const filteredGallery =
+    selectedCategory === "all"
+      ? galleryPhotos
+      : galleryPhotos.filter((p) => p.category === selectedCategory);
+
+  const sections = [
+    { id: "all", label: "All Sections" },
+    { id: "homepage", label: "Homepage" },
+    { id: "about", label: "About" },
+    { id: "academics", label: "Academics" },
+    { id: "admissions", label: "Admissions" },
+    { id: "student_life", label: "Student Life" },
+    { id: "brand", label: "Brand Logos" },
+  ];
+
+  const galleryCategories = [
+    "all",
+    "Classrooms",
+    "Science",
+    "Library",
+    "Sport",
+    "Creative Spaces",
+    "Chapel",
+    "Outdoor",
+    "Student Life",
+  ];
+
+  return (
+    <div className="mx-auto max-w-7xl px-6 py-10 sm:px-10 lg:px-12">
+      {/* Toast Notification */}
+      {notification && (
+        <div
+          className={`fixed bottom-6 right-6 z-50 flex max-w-sm items-center gap-3 rounded-xl border p-4 shadow-lg transition-all ${
+            notification.type === "success"
+              ? "border-emerald-200 bg-white text-[#19151C]"
+              : "border-red-200 bg-white text-red-900"
+          }`}
+        >
+          {notification.type === "success" ? (
+            <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
+              <CheckCircle2 size={16} />
+            </div>
+          ) : (
+            <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-red-100 text-red-700">
+              <AlertTriangle size={16} />
+            </div>
+          )}
+          <p className="font-sans text-xs leading-relaxed">
+            {notification.message}
+          </p>
+        </div>
+      )}
+
+      {/* Page Header */}
+      <section className="border-b border-[#19151C]/10 pb-8">
+        <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
+          <div>
+            <p className="font-sans text-xs font-semibold uppercase tracking-wider text-[#6C0798]">
+              Admin Panel
+            </p>
+            <h1 className="mt-2 font-serif text-3xl text-[#19151C] sm:text-4xl">
+              Website Photos
+            </h1>
+            <p className="mt-2 max-w-2xl font-sans text-sm leading-relaxed text-[#19151C]/65">
+              Review and update the images across the school website. When you upload a picture,
+              it is resized and compressed in your browser so pages load fast.
+            </p>
+          </div>
+
+          {/* Database status pill */}
+          <div className="flex shrink-0 items-center gap-3 rounded-full border border-[#19151C]/10 bg-white px-4 py-2 shadow-sm">
+            <span
+              className={`h-2 w-2 rounded-full ${
+                isSupabaseConnected ? "bg-emerald-500" : "bg-amber-500"
+              }`}
+            />
+            <span className="font-sans text-xs font-medium text-[#19151C]/80">
+              {isSupabaseConnected ? "Connected to Supabase" : "Local mode (in memory)"}
+            </span>
+            <button
+              onClick={fetchSlotsAndGallery}
+              title="Refresh"
+              className="text-[#19151C]/40 transition-colors hover:text-[#6C0798]"
+            >
+              <RefreshCw size={13} className={loading ? "animate-spin" : ""} />
+            </button>
+          </div>
+        </div>
+
+        {/* Navigation Tabs */}
+        <div className="mt-8 flex items-center gap-3">
+          <button
+            onClick={() => setActiveTab("slots")}
+            className={`rounded-full px-5 py-2 font-sans text-sm font-medium transition-colors ${
+              activeTab === "slots"
+                ? "bg-[#6C0798] text-white shadow-sm"
+                : "bg-white text-[#19151C]/70 border border-[#19151C]/10 hover:border-[#6C0798]/40 hover:text-[#19151C]"
+            }`}
+          >
+            Website Pages ({slots.length})
+          </button>
+
+          <button
+            onClick={() => setActiveTab("gallery")}
+            className={`rounded-full px-5 py-2 font-sans text-sm font-medium transition-colors ${
+              activeTab === "gallery"
+                ? "bg-[#6C0798] text-white shadow-sm"
+                : "bg-white text-[#19151C]/70 border border-[#19151C]/10 hover:border-[#6C0798]/40 hover:text-[#19151C]"
+            }`}
+          >
+            Campus Gallery ({galleryPhotos.length})
+          </button>
+        </div>
+      </section>
+
+      {/* TAB 1: WEBSITE PAGE SLOTS */}
+      {activeTab === "slots" && (
+        <div className="mt-8">
+          {/* Section Filter Pills */}
+          <div className="flex flex-wrap items-center gap-2">
+            {sections.map((sec) => (
+              <button
+                key={sec.id}
+                onClick={() => setSelectedSection(sec.id)}
+                className={`rounded-full border px-4 py-1.5 font-sans text-xs transition-colors ${
+                  selectedSection === sec.id
+                    ? "border-[#6C0798] bg-[#6C0798] text-white shadow-sm"
+                    : "border-[#19151C]/15 bg-white text-[#19151C]/70 hover:border-[#6C0798]/40 hover:text-[#19151C]"
+                }`}
+              >
+                {sec.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Cards Grid */}
+          <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {filteredSlots.map((slot) => (
+              <div
+                key={slot.id}
+                className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-[#19151C]/10 bg-white shadow-sm transition-all duration-200 hover:border-[#6C0798]/30 hover:shadow-md"
+              >
+                {/* Photo Presentation */}
+                <div
+                  onClick={() => {
+                    setTargetSlot(slot);
+                    setIsGalleryUpload(false);
+                    setUploadModalOpen(true);
+                  }}
+                  className="relative aspect-[16/10] w-full cursor-pointer overflow-hidden bg-[#FAF8F9]"
+                >
+                  <img
+                    src={slot.currentUrl}
+                    alt={slot.altText || slot.label}
+                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                  />
+
+                  {/* Gentle hover prompt */}
+                  <div className="absolute inset-0 flex items-center justify-center bg-[#19151C]/30 opacity-0 backdrop-blur-[1px] transition-opacity duration-200 group-hover:opacity-100">
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-3.5 py-1.5 font-sans text-xs font-semibold text-[#19151C] shadow-md">
+                      <Camera size={13} />
+                      <span>Change photo</span>
+                    </span>
+                  </div>
+
+                  {/* Status chip if updated */}
+                  {slot.currentUrl.includes("cloudinary") && (
+                    <span className="absolute right-3 top-3 rounded-full bg-white/95 px-2.5 py-0.5 font-sans text-[10px] font-medium text-[#6C0798] shadow-sm backdrop-blur-sm">
+                      Updated photo
+                    </span>
+                  )}
+                </div>
+
+                {/* Card Information */}
+                <div className="flex flex-1 flex-col justify-between p-5">
+                  <div>
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="rounded-full bg-[#6C0798]/10 px-2.5 py-0.5 font-sans text-[11px] font-semibold text-[#6C0798] capitalize">
+                        {slot.section.replace("_", " ")}
+                      </span>
+                      <span className="font-sans text-xs text-[#19151C]/45">
+                        {slot.recommendedDimensions}
+                      </span>
+                    </div>
+
+                    <h2 className="mt-2.5 font-serif text-lg text-[#19151C]">
+                      {slot.label}
+                    </h2>
+
+                    <p className="mt-1 font-sans text-xs leading-relaxed text-[#19151C]/60">
+                      {slot.description}
+                    </p>
+                  </div>
+
+                  {/* Action Button */}
+                  <button
+                    onClick={() => {
+                      setTargetSlot(slot);
+                      setIsGalleryUpload(false);
+                      setUploadModalOpen(true);
+                    }}
+                    className="mt-4 inline-flex w-full items-center justify-center gap-1.5 rounded-full border border-[#19151C]/15 bg-white py-2 font-sans text-xs font-medium text-[#19151C] transition-all hover:border-[#6C0798] hover:bg-[#6C0798] hover:text-white"
+                  >
+                    <UploadCloud size={14} />
+                    <span>Change photo</span>
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* TAB 2: CAMPUS GALLERY */}
+      {activeTab === "gallery" && (
+        <div className="mt-8">
+          <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+            {/* Category Filter Pills */}
+            <div className="flex flex-wrap items-center gap-2">
+              {galleryCategories.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setSelectedCategory(cat)}
+                  className={`rounded-full border px-4 py-1.5 font-sans text-xs capitalize transition-colors ${
+                    selectedCategory === cat
+                      ? "border-[#6C0798] bg-[#6C0798] text-white shadow-sm"
+                      : "border-[#19151C]/15 bg-white text-[#19151C]/70 hover:border-[#6C0798]/40 hover:text-[#19151C]"
+                  }`}
+                >
+                  {cat === "all" ? "All categories" : cat}
+                </button>
+              ))}
+            </div>
+
+            {/* Add Photo Button */}
+            <button
+              onClick={() => {
+                setTargetSlot({
+                  id: "gallery_photo",
+                  section: "about",
+                  label: "New Campus Photo",
+                  description: "Upload a new photo for the campus gallery",
+                  aspectRatio: "4:3",
+                  recommendedDimensions: "1600x1200",
+                  currentUrl: "",
+                  altText: "",
+                });
+                setIsGalleryUpload(true);
+                setUploadModalOpen(true);
+              }}
+              className="inline-flex shrink-0 items-center gap-2 rounded-full bg-[#6C0798] px-5 py-2 font-sans text-xs font-medium text-white shadow-sm transition-colors hover:bg-[#4B075F]"
+            >
+              <Plus size={15} />
+              <span>Add photo to gallery</span>
+            </button>
+          </div>
+
+          {/* Gallery Category Selector for new photo (when uploading) */}
+          <div className="mt-4 flex items-center gap-2 font-sans text-xs text-[#19151C]/70">
+            <span>Uploading to category:</span>
+            <select
+              value={newGalleryCategory}
+              onChange={(e) => setNewGalleryCategory(e.target.value)}
+              className="rounded-lg border border-[#19151C]/15 bg-white px-2.5 py-1 text-xs text-[#19151C] outline-none focus:border-[#6C0798]"
+            >
+              {galleryCategories
+                .filter((c) => c !== "all")
+                .map((cat) => (
+                  <option key={cat} value={cat}>
+                    {cat}
+                  </option>
+                ))}
+            </select>
+          </div>
+
+          {/* Gallery Grid */}
+          {filteredGallery.length === 0 ? (
+            <div className="mt-12 flex flex-col items-center justify-center rounded-2xl border border-dashed border-[#19151C]/15 bg-white p-12 text-center">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#6C0798]/10 text-[#6C0798]">
+                <Camera size={22} />
+              </div>
+              <h3 className="mt-4 font-serif text-xl text-[#19151C]">
+                No photos in this category yet
+              </h3>
+              <p className="mt-1 max-w-sm font-sans text-xs text-[#19151C]/60">
+                Click &quot;Add photo to gallery&quot; above to upload a new picture for this section.
+              </p>
+            </div>
+          ) : (
+            <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+              {filteredGallery.map((photo) => (
+                <div
+                  key={photo.id}
+                  className="group relative flex flex-col overflow-hidden rounded-2xl border border-[#19151C]/10 bg-white shadow-sm transition-all hover:shadow-md"
+                >
+                  <div className="relative aspect-[4/5] w-full overflow-hidden bg-[#FAF8F9]">
+                    <img
+                      src={photo.cloudinaryUrl}
+                      alt={photo.title}
+                      className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+
+                    {/* Category badge */}
+                    <span className="absolute left-2.5 top-2.5 rounded-full bg-white/90 px-2.5 py-0.5 font-sans text-[10px] font-medium text-[#19151C] shadow-sm backdrop-blur-sm">
+                      {photo.category}
+                    </span>
+
+                    {/* Delete button */}
+                    <button
+                      onClick={() => handleDeleteGalleryPhoto(photo.id)}
+                      className="absolute right-2.5 top-2.5 flex h-7 w-7 items-center justify-center rounded-full bg-white/90 text-[#19151C]/60 opacity-0 shadow-sm transition-all duration-200 group-hover:opacity-100 hover:bg-red-600 hover:text-white"
+                      title="Delete photo"
+                    >
+                      <Trash2 size={13} />
+                    </button>
+                  </div>
+
+                  <div className="p-3.5">
+                    <h3 className="font-serif text-sm font-medium text-[#19151C]">
+                      {photo.title}
+                    </h3>
+                    {photo.caption && (
+                      <p className="mt-0.5 line-clamp-1 font-sans text-xs text-[#19151C]/60">
+                        {photo.caption}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Upload Modal */}
+      {uploadModalOpen && targetSlot && (
+        <ImageUploadModal
+          isOpen={uploadModalOpen}
+          onClose={() => {
+            setUploadModalOpen(false);
+            setTargetSlot(null);
+          }}
+          onSuccess={(data) => {
+            if (isGalleryUpload) {
+              handleGalleryUploadSuccess(data);
+            } else {
+              handleSlotUploadSuccess(data);
+            }
+          }}
+          title={targetSlot.label}
+          description={targetSlot.description}
+          section={targetSlot.section}
+          slotId={targetSlot.id}
+          targetAspectRatio={targetSlot.aspectRatio}
+          recommendedDimensions={targetSlot.recommendedDimensions}
+          initialAltText={targetSlot.altText}
+        />
+      )}
+    </div>
+  );
+}
+
